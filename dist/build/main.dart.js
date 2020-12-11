@@ -1,1 +1,0 @@
-window.mpflutterUseSocket = 1;

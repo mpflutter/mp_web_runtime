@@ -15,23 +15,23 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
           "text-overflow": "ellipsis",
           display: "-webkit-box",
           "-webkit-line-clamp": this.props.data.attributes.maxLines.toString(),
-          "-webkit-box-orient": "vertical"
-        }
+          "-webkit-box-orient": "vertical",
+        },
       };
     }
     return (
       <DivContextConsumer style={style}>
-        {this.props.data.children?.map((it) => {
-          return jsxComponentFromSpan(it);
+        {this.props.data.children?.map((it, idx) => {
+          return jsxComponentFromSpan(it, idx);
         })}
       </DivContextConsumer>
     );
   }
 }
 
-const jsxComponentFromSpan = (it: any) => {
+const jsxComponentFromSpan = (it: any, idx: number) => {
   if (it.name === "text_span") {
-    return <TextSpan data={it} />;
+    return <TextSpan key={`idx_${idx}`} data={it} />;
   } else {
     return null;
   }
@@ -40,10 +40,10 @@ const jsxComponentFromSpan = (it: any) => {
 export class TextSpan extends Component<any> {
   render() {
     return (
-      <span style={cssTextStyle(this.props.data.attributes.style) as any}>
+      <span style={cssTextStyle(this.props.data.attributes.style)}>
         {this.props.data.attributes.text ??
-          this.props.data.children?.map((it: any) => {
-            return jsxComponentFromSpan(it);
+          this.props.data.children?.map((it: any, idx: number) => {
+            return jsxComponentFromSpan(it, idx);
           })}
       </span>
     );

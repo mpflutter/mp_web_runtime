@@ -16,8 +16,8 @@ export class TabBar extends Component<{
         message: {
           event: "onTapIndex",
           target: this.props.data.attributes.onTapIndex,
-          data: index
-        }
+          data: index,
+        },
       })
     );
   }
@@ -28,8 +28,28 @@ export class TabBar extends Component<{
       <div
         style={
           nested
-            ? "background-color: white; position: -webkit-sticky; position: sticky;display: flex; flex-direction: row; justify-content: space-around; top: 0px; left: 0px; right: 0px; height: 50px;" as any
-            : "background-color: white; position: fixed;display: flex; flex-direction: row; justify-content: space-around; top: 0px; left: 0px; right: 0px; height: 50px;" as any
+            ? {
+                backgroundColor: "white",
+                position: "sticky",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                top: "0px",
+                left: "0px",
+                right: "0px",
+                height: "50px",
+              }
+            : {
+                backgroundColor: "white",
+                position: "fixed",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                top: "0px",
+                left: "0px",
+                right: "0px",
+                height: "50px",
+              }
         }
       >
         {this.props.data.children.map((it, idx) => {
@@ -40,7 +60,7 @@ export class TabBar extends Component<{
                 height: "50px",
                 flex: "1",
                 display: "flex",
-                flexDirection: "column"
+                flexDirection: "column",
               }}
             >
               <div
@@ -53,7 +73,7 @@ export class TabBar extends Component<{
                   fontWeight:
                     idx === this.props.data.attributes.selected
                       ? "bold"
-                      : "normal"
+                      : "normal",
                 }}
               >
                 {it.attributes.text}
@@ -65,7 +85,7 @@ export class TabBar extends Component<{
                   visibility:
                     idx === this.props.data.attributes.selected
                       ? "visible"
-                      : "hidden"
+                      : "hidden",
                 }}
               ></div>
             </div>

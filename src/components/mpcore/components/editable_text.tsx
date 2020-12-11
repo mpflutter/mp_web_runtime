@@ -16,8 +16,8 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
           message: {
             event: "onSubmitted",
             target: this.props.data.attributes.onSubmitted,
-            data: value
-          }
+            data: value,
+          },
         })
       );
       target.blur();
@@ -31,8 +31,8 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
         message: {
           event: "onChanged",
           target: this.props.data.attributes.onChanged,
-          data: value
-        }
+          data: value,
+        },
       })
     );
   }
@@ -67,23 +67,26 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
       return (
         <DivContextConsumer>
           <textarea
-            style={`${cssTextStyle(
-              this.props.data.attributes.style
-            )}; text-align: ${cssTextAlign(
-              this.props.data.attributes.textAlign
-            )};width: 100%; height: 100%; background-color: transparent; border: none;` as any}
-            onInput={event => {
+            style={{
+              ...cssTextStyle(this.props.data.attributes.style),
+              textAlign: cssTextAlign(this.props.data.attributes.textAlign),
+              width: "100%",
+              height: "100%",
+              backgroundColor: "transparent",
+              border: "none",
+            }}
+            onInput={(event) => {
               this._lastValue = (event.target as HTMLInputElement).value;
               this._onChanged(
                 event.target as HTMLInputElement,
                 (event.target as HTMLInputElement).value
               );
             }}
-            onChange={event => {
-              this._lastValue = (event.target as unknown as HTMLInputElement).value;
+            onChange={(event) => {
+              this._lastValue = ((event.target as unknown) as HTMLInputElement).value;
               this._onChanged(
-                event.target as unknown as HTMLInputElement,
-                (event.target as unknown as HTMLInputElement).value
+                (event.target as unknown) as HTMLInputElement,
+                ((event.target as unknown) as HTMLInputElement).value
               );
             }}
             rows={this.props.data.attributes.maxLines}
@@ -97,12 +100,15 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
     return (
       <DivContextConsumer>
         <input
-          style={`${cssTextStyle(
-            this.props.data.attributes.style
-          )}; text-align: ${cssTextAlign(
-            this.props.data.attributes.textAlign
-          )};width: 100%; height: 100%; background-color: transparent; border: none;` as any}
-          onKeyUp={event => {
+          style={{
+            ...cssTextStyle(this.props.data.attributes.style),
+            textAlign: cssTextAlign(this.props.data.attributes.textAlign),
+            width: "100%",
+            height: "100%",
+            backgroundColor: "transparent",
+            border: "none",
+          }}
+          onKeyUp={(event) => {
             if (event.key === "Enter" || event.keyCode === 13) {
               this._onSubmitted(
                 event.target as HTMLInputElement,
@@ -110,14 +116,14 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
               );
             }
           }}
-          onInput={event => {
+          onInput={(event) => {
             this._lastValue = (event.target as HTMLInputElement).value;
             this._onChanged(
               event.target as HTMLInputElement,
               (event.target as HTMLInputElement).value
             );
           }}
-          onChange={event => {
+          onChange={(event) => {
             this._lastValue = (event.target as HTMLInputElement).value;
             this._onChanged(
               event.target as HTMLInputElement,
