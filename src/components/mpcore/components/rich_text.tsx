@@ -21,7 +21,9 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
     }
     return (
       <DivContextConsumer style={style}>
-        {this.props.children}
+        {this.props.data.children?.map((it) => {
+          return jsxComponentFromSpan(it);
+        })}
       </DivContextConsumer>
     );
   }
