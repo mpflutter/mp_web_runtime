@@ -155,7 +155,7 @@ export class App extends Component<any, any> {
   static attachDialog(element: any, touchable: boolean = true) {
     if (touchable) {
       ReactDOM.render(
-        <div style={{ pointerEvents: "auto" }}>element</div>,
+        <div style={{ pointerEvents: "auto" }}>{element}</div>,
         document.getElementById("mp_dialog")
       );
     } else {
