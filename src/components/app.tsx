@@ -9,6 +9,7 @@ import {
   DivContextConsumer,
 } from "./mpcore/components/div_context";
 import { MPCore } from "./mpcore/mpcore";
+import { WebDialogs } from "./mpcore/components/web_dialogs";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -36,12 +37,15 @@ export class App extends Component<any, any> {
     socket.onmessage = (event) => {
       try {
         const messageData = JSON.parse(event.data);
+
         if (messageData.type === "frame_data") {
           this.setState({
             data: messageData.message,
           });
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
+        } else if (messageData.type === "action:web_dialogs") {
+          WebDialogs.receivedWebDialogsMessage(messageData.message);
         } else {
           MPCore.plugins.forEach((plugin) => {
             plugin.onMessage?.call(this, messageData);
