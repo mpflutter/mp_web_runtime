@@ -152,7 +152,7 @@ export class App extends Component<any, any> {
     );
   }
 
-  attachDialog(element: any, touchable: boolean = true) {
+  static attachDialog(element: any, touchable: boolean = true) {
     if (touchable) {
       ReactDOM.render(
         <div style={{ pointerEvents: "auto" }}>element</div>,
@@ -163,7 +163,7 @@ export class App extends Component<any, any> {
     }
   }
 
-  detachDialog() {
+  static detachDialog() {
     ReactDOM.unmountComponentAtNode(document.getElementById("mp_dialog")!);
   }
 }
