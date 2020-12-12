@@ -151,6 +151,21 @@ export class App extends Component<any, any> {
       </div>
     );
   }
+
+  attachDialog(element: any, touchable: boolean = true) {
+    if (touchable) {
+      ReactDOM.render(
+        <div style={{ pointerEvents: "auto" }}>element</div>,
+        document.getElementById("mp_dialog")
+      );
+    } else {
+      ReactDOM.render(element, document.getElementById("mp_dialog"));
+    }
+  }
+
+  detachDialog() {
+    ReactDOM.unmountComponentAtNode(document.getElementById("mp_dialog")!);
+  }
 }
 
 class Router {
