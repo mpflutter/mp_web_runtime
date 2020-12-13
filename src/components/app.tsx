@@ -138,29 +138,19 @@ export class App extends Component<any, any> {
   }
 
   render() {
-    let paddingTop = "unset";
-    if (this.state.data?.tabBar && !this.state.data?.header) {
-      paddingTop = TabBar.height;
-    }
     App.isListBody = this.state.data?.isListBody === true;
     App.setupBodyScrollBehavior();
     return (
       <div
         id="app"
         style={{
-          paddingTop,
           height: this.state.data?.isListBody === true ? "unset" : "100%",
         }}
       >
         {this.state.data?.header
           ? MPCore.render(this.state.data?.header)
           : null}
-        {this.state.data?.tabBar ? (
-          <TabBar
-            data={this.state.data.tabBar}
-            nested={this.state.data?.header}
-          />
-        ) : null}
+        {this.state.data?.tabBar ? MPCore.render(this.state.data.tabBar) : null}
         {this.state.data ? <Body data={this.state.data.body} /> : null}
       </div>
     );

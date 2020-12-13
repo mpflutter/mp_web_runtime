@@ -29,6 +29,7 @@ import { EditableText } from "./components/editable_text";
 import { ComponentType, createElement, ReactElement } from "react";
 import { MPComponentsProps } from "./component";
 import { MPPlugin } from "./plugin";
+import { TabBar } from "./components/tab_bar";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -60,6 +61,7 @@ export class MPCore {
     sliver_list: SliverList,
     div: Div,
     editable_text: EditableText,
+    tab_bar: TabBar,
   };
 
   static plugins: MPPlugin[] = [];
