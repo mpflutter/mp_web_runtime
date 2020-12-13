@@ -20,6 +20,8 @@ export class App extends Component<any, any> {
   static callbackChannel: (message: string) => void = () => {};
 
   state: any = {};
+  static isDialogDisplaying: boolean = false;
+  static isListBody: boolean = false;
 
   componentDidMount() {
     if ((window as any).mpflutterUseSocket === 1) {
@@ -125,11 +127,23 @@ export class App extends Component<any, any> {
     }
   }
 
+  static setupBodyScrollBehavior() {
+    if (App.isDialogDisplaying) {
+      document.body.style.setProperty("overflow", "hidden");
+    } else if (this.isListBody) {
+      document.body.style.setProperty("overflow", "unset");
+    } else {
+      document.body.style.setProperty("overflow", "hidden");
+    }
+  }
+
   render() {
     let paddingTop = "unset";
     if (this.state.data?.tabBar && !this.state.data?.header) {
       paddingTop = TabBar.height;
     }
+    App.isListBody = this.state.data?.isListBody === true;
+    App.setupBodyScrollBehavior();
     return (
       <div
         id="app"
@@ -153,6 +167,7 @@ export class App extends Component<any, any> {
   }
 
   static attachDialog(element: any, touchable: boolean = true) {
+    this.isDialogDisplaying = true;
     if (touchable) {
       ReactDOM.render(
         <div style={{ pointerEvents: "auto" }}>{element}</div>,
@@ -161,12 +176,13 @@ export class App extends Component<any, any> {
     } else {
       ReactDOM.render(element, document.getElementById("mp_dialog"));
     }
-    document.body.style.setProperty("overflow", "hidden");
+    App.setupBodyScrollBehavior();
   }
 
   static detachDialog() {
+    this.isDialogDisplaying = false;
     ReactDOM.unmountComponentAtNode(document.getElementById("mp_dialog")!);
-    document.body.style.setProperty("overflow", "unset");
+    App.setupBodyScrollBehavior();
   }
 }
 
