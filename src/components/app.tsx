@@ -161,10 +161,12 @@ export class App extends Component<any, any> {
     } else {
       ReactDOM.render(element, document.getElementById("mp_dialog"));
     }
+    document.body.style.setProperty("overflow", "hidden");
   }
 
   static detachDialog() {
     ReactDOM.unmountComponentAtNode(document.getElementById("mp_dialog")!);
+    document.body.style.setProperty("overflow", "unset");
   }
 }
 
