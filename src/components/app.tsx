@@ -10,6 +10,7 @@ import {
 } from "./mpcore/components/div_context";
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
+import { cssColor } from "./mpcore/utils/color";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -145,6 +146,9 @@ export class App extends Component<any, any> {
         id="app"
         style={{
           height: this.state.data?.isListBody === true ? "unset" : "100%",
+          backgroundColor: this.state.data?.backgroundColor
+            ? cssColor(this.state.data?.backgroundColor)
+            : "unset",
         }}
       >
         {this.state.data?.header
