@@ -3,7 +3,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { Body } from "./mpcore/components/body";
-import { TabBar } from "./mpcore/components/tab_bar";
 import {
   DivContextProvider,
   DivContextConsumer,
@@ -11,6 +10,7 @@ import {
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
 import { cssColor } from "./mpcore/utils/color";
+import { applyPatch } from "fast-json-patch";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -21,6 +21,7 @@ export class App extends Component<any, any> {
   static callbackChannel: (message: string) => void = () => {};
 
   state: any = {};
+  lastFrameData: any;
   static isDialogDisplaying: boolean = false;
   static isListBody: boolean = false;
 
@@ -40,10 +41,19 @@ export class App extends Component<any, any> {
     socket.onmessage = (event) => {
       try {
         const messageData = JSON.parse(event.data);
-
         if (messageData.type === "frame_data") {
+          this.lastFrameData = messageData;
           this.setState({
             data: messageData.message,
+          });
+        } else if (messageData.type === "frame_diff_data") {
+          const patchedFrameData = applyPatch(
+            this.lastFrameData,
+            messageData.message as any
+          ).newDocument;
+          this.lastFrameData = patchedFrameData;
+          this.setState({
+            data: patchedFrameData.message,
           });
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
@@ -76,8 +86,18 @@ export class App extends Component<any, any> {
       try {
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
+          this.lastFrameData = messageData;
           this.setState({
             data: messageData.message,
+          });
+        } else if (messageData.type === "frame_diff_data") {
+          const patchedFrameData = applyPatch(
+            this.lastFrameData,
+            messageData.message as any
+          ).newDocument;
+          this.lastFrameData = patchedFrameData;
+          this.setState({
+            data: patchedFrameData.message,
           });
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
