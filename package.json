@@ -1,5 +1,6 @@
 {
   "name": "mp_web_runtime",
+  "homepage": "./",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,7 +20,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node post-build.js && rm -rf dist && mv build dist",
+    "build": "react-scripts build && rm -rf dist && mv build dist",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
