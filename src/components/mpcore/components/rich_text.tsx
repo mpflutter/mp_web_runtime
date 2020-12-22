@@ -12,10 +12,11 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
         ...style,
         ...{
           overflow: "hidden",
-          "textOverflow": "ellipsis",
+          textOverflow: "ellipsis",
           display: "-webkit-box",
-          "WebkitLineClamp": this.props.data.attributes.maxLines.toString(),
-          "WebkitBoxOrient": "vertical",
+          WebkitLineClamp: this.props.data.attributes.maxLines.toString(),
+          WebkitBoxOrient: "vertical",
+          fontSize: "11px",
         },
       };
     }
