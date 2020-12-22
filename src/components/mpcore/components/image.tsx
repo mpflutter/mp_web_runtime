@@ -23,7 +23,7 @@ export class Image extends Component<{ data: MPComponentsProps }> {
               case "BoxFit.contain":
                 return "contain";
               case "BoxFit.cover":
-                return "conver";
+                return "cover";
               case "BoxFit.fitWidth":
                 return "scale-down";
               case "BoxFit.fitHeight":
