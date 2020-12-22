@@ -2,14 +2,20 @@ import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssBorder } from "../utils/border";
-import { cssColor } from "../utils/color";
+import { cssColor, cssGradient } from "../utils/color";
 import { cssBorderRadius, cssOffset } from "../utils/geometry";
+import { DivContextProvider } from "./div_context";
 
 export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
   renderDecoration() {
     let output: any = {};
     if (this.props.data.attributes.color) {
       output["backgroundColor"] = cssColor(this.props.data.attributes.color);
+    }
+    if (this.props.data.attributes.decoration?.gradient) {
+      output["background"] = cssGradient(
+        this.props.data.attributes.decoration.gradient
+      );
     }
     if (this.props.data.attributes.decoration?.boxShadow?.[0]) {
       const shadow = this.props.data.attributes.decoration?.boxShadow?.[0];
@@ -22,13 +28,13 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
     if (this.props.data.attributes.decoration?.borderRadius) {
       output = {
         ...output,
-        ...cssBorderRadius(this.props.data.attributes.decoration.borderRadius)
+        ...cssBorderRadius(this.props.data.attributes.decoration.borderRadius),
       };
     }
     if (this.props.data.attributes.decoration?.border) {
       output = {
         ...output,
-        ...cssBorder(this.props.data.attributes.decoration.border)
+        ...cssBorder(this.props.data.attributes.decoration.border),
       };
     }
     return output;
@@ -36,13 +42,13 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
 
   render() {
     return (
-      <div
+      <DivContextProvider
         style={{
-          ...this.renderDecoration()
+          ...this.renderDecoration(),
         }}
       >
         {this.props.children}
-      </div>
+      </DivContextProvider>
     );
   }
 }
