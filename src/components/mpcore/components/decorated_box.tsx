@@ -42,13 +42,15 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
 
   render() {
     return (
-      <DivContextProvider
+      <div
         style={{
+          minWidth: "-webkit-fill-available",
+          minHeight: "100%",
           ...this.renderDecoration(),
         }}
       >
         {this.props.children}
-      </DivContextProvider>
+      </div>
     );
   }
 }

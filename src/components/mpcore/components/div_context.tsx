@@ -2,7 +2,7 @@ import { Component, createContext, createElement } from "react";
 import { MPComponentsProps } from "../component";
 import React from "react";
 
-export const DivContext = createContext({ style: {} });
+export const DivContext = createContext<{ style: any }>({ style: {} });
 
 export class DivContextProvider extends Component<{
   data?: MPComponentsProps;
@@ -34,18 +34,20 @@ export class DivContextProvider extends Component<{
     }
     return (
       <DivContext.Consumer>
-        {(divContext) => (
-          <DivContext.Provider
-            value={{
-              style: {
-                ...divContext.style,
-                ...this.props.style,
-              },
-            }}
-          >
-            {this.props.children}
-          </DivContext.Provider>
-        )}
+        {(divContext) => {
+          return (
+            <DivContext.Provider
+              value={{
+                style: {
+                  ...divContext.style,
+                  ...this.props.style,
+                },
+              }}
+            >
+              {this.props.children}
+            </DivContext.Provider>
+          );
+        }}
       </DivContext.Consumer>
     );
   }
