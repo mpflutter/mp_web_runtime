@@ -5,6 +5,7 @@ import { MPComponentsProps } from "../component";
 import {
   renderSliverGridDelegateWithFixedCrossAxisCount,
   renderSliverGridDelegateWithMaxCrossAxisExtent,
+  renderSliverWaterfallDelegate,
 } from "./grid_waterfall_layout";
 
 export class GridView extends Component<{ data: MPComponentsProps }> {
@@ -66,11 +67,27 @@ export class GridView extends Component<{ data: MPComponentsProps }> {
               this.props.data.attributes.gridDelegate,
               this.props.children as any[]
             );
+          } else if (
+            this.props.data.attributes.gridDelegate?.classname ===
+            "SliverWaterfallDelegate"
+          ) {
+            return renderSliverWaterfallDelegate(
+              this.props.data.attributes.gridDelegate,
+              this.props.children as any[]
+            );
           } else {
             return [];
           }
         })()}
       </div>
     );
+  }
+}
+
+export class SliverWaterfallItem extends Component<{
+  data: MPComponentsProps;
+}> {
+  render() {
+    return this.props.children;
   }
 }

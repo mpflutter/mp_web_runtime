@@ -30,7 +30,7 @@ import { ComponentType, createElement, ReactElement } from "react";
 import { MPComponentsProps } from "./component";
 import { MPPlugin } from "./plugin";
 import { TabBar } from "./components/tab_bar";
-import { GridView } from "./components/grid_view";
+import { GridView, SliverWaterfallItem } from "./components/grid_view";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -64,6 +64,7 @@ export class MPCore {
     editable_text: EditableText,
     tab_bar: TabBar,
     grid_view: GridView,
+    sliver_waterfall_item: SliverWaterfallItem,
   };
 
   static plugins: MPPlugin[] = [];
