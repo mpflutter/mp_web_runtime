@@ -1,8 +1,6 @@
 import { cssPadding } from "../utils/geometry";
 import { DivContextProvider } from "./div_context";
 
-const clientWidth = document.body.clientWidth;
-
 export interface SliverGridDelegateWithFixedCrossAxisCount {
   mainAxisSpacing: number;
   crossAxisSpacing: number;
@@ -13,8 +11,11 @@ export interface SliverGridDelegateWithFixedCrossAxisCount {
 export const renderSliverGridDelegateWithFixedCrossAxisCount = (
   delegate: SliverGridDelegateWithFixedCrossAxisCount,
   padding: string | undefined,
-  children: any[]
+  children: any[],
+  options?: { parentWidth: number | undefined } | undefined
 ): any[] => {
+  const clientWidth = options?.parentWidth ?? document.body.clientWidth;
+
   const gridViewPadding = padding ? cssPadding(padding) : {};
   const paddingTop = gridViewPadding.paddingTop
     ? parseInt(gridViewPadding.paddingTop)
@@ -81,8 +82,11 @@ export interface SliverGridDelegateWithMaxCrossAxisExtent {
 export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
   delegate: SliverGridDelegateWithMaxCrossAxisExtent,
   padding: string | undefined,
-  children: any[]
+  children: any[],
+  options?: { parentWidth: number | undefined } | undefined
 ): any[] => {
+  const clientWidth = options?.parentWidth ?? document.body.clientWidth;
+
   const gridViewPadding = padding ? cssPadding(padding) : {};
   const paddingTop = gridViewPadding.paddingTop
     ? parseInt(gridViewPadding.paddingTop)
@@ -150,8 +154,10 @@ export interface SliverWaterfallDelegate {
 export const renderSliverWaterfallDelegate = (
   delegate: SliverWaterfallDelegate,
   padding: string | undefined,
-  children: any[]
+  children: any[],
+  options?: { parentWidth: number | undefined } | undefined
 ): any[] => {
+  const clientWidth = options?.parentWidth ?? document.body.clientWidth;
   const gridViewPadding = padding ? cssPadding(padding) : {};
   const paddingLeft = gridViewPadding.paddingLeft
     ? parseInt(gridViewPadding.paddingLeft)

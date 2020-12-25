@@ -31,6 +31,7 @@ import { MPComponentsProps } from "./component";
 import { MPPlugin } from "./plugin";
 import { TabBar } from "./components/tab_bar";
 import { GridView, SliverWaterfallItem } from "./components/grid_view";
+import { SliverGrid } from "./components/sliver_grid";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -60,6 +61,7 @@ export class MPCore {
     icon: Icon,
     custom_scroll_view: CustomScrollView,
     sliver_list: SliverList,
+    sliver_grid: SliverGrid,
     div: Div,
     editable_text: EditableText,
     tab_bar: TabBar,
