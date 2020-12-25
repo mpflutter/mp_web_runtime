@@ -4,7 +4,6 @@ import { MPComponentsProps } from "../component";
 import { cssBorder } from "../utils/border";
 import { cssColor, cssGradient } from "../utils/color";
 import { cssBorderRadius, cssOffset } from "../utils/geometry";
-import { DivContextProvider } from "./div_context";
 
 export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
   renderDecoration() {
