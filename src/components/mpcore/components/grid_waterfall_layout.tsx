@@ -156,7 +156,7 @@ export const renderSliverWaterfallDelegate = (
   padding: string | undefined,
   children: any[],
   options?: { parentWidth: number | undefined } | undefined
-): any[] => {
+): any => {
   const clientWidth = options?.parentWidth ?? document.body.clientWidth;
   const gridViewPadding = padding ? cssPadding(padding) : {};
   const paddingLeft = gridViewPadding.paddingLeft
@@ -177,6 +177,7 @@ export const renderSliverWaterfallDelegate = (
     delegate.crossAxisCount;
   let currentRowIndex = 0;
   let layoutCache: any[] = [];
+  let maxY = 0.0;
 
   const layouts = children.map((it, idx) => {
     const itemHeight = it.props?.data?.attributes?.height ?? 0.0;
@@ -227,28 +228,33 @@ export const renderSliverWaterfallDelegate = (
     };
     layoutCache[currentRowIndex] = size;
     currentRowIndex = (currentRowIndex + 1) % delegate.crossAxisCount;
+    maxY = Math.max(currentY + itemHeight, maxY);
     return size;
   });
 
-  return children.map((it, idx) => {
-    return (
-      <div
-        key={`layout_${idx}`}
-        style={{
-          position: "absolute",
-          left: layouts[idx].x + "px",
-          top: layouts[idx].y + "px",
-          width: layouts[idx].width + "px",
-          height: layouts[idx].height + "px",
-        }}
-      >
-        <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
-          {it}
-        </DivContextProvider>
-        {idx === layouts.length - 1 && paddingBottom > 0 ? (
-          <div style={{ width: "100%", height: paddingBottom + "px" }} />
-        ) : null}
-      </div>
-    );
-  });
+  return (
+    <div style={{ width: "100%", height: maxY + "px" }}>
+      {children.map((it, idx) => {
+        return (
+          <div
+            key={`layout_${idx}`}
+            style={{
+              position: "absolute",
+              left: layouts[idx].x + "px",
+              top: layouts[idx].y + "px",
+              width: layouts[idx].width + "px",
+              height: layouts[idx].height + "px",
+            }}
+          >
+            <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
+              {it}
+            </DivContextProvider>
+            {idx === layouts.length - 1 && paddingBottom > 0 ? (
+              <div style={{ width: "100%", height: paddingBottom + "px" }} />
+            ) : null}
+          </div>
+        );
+      })}
+    </div>
+  );
 };

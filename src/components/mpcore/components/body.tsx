@@ -4,7 +4,6 @@ import { MPCore } from "../mpcore";
 
 export class Body extends Component<{ data: any }> {
   render() {
-    // console.log(this.props.data);
     if (this.props.data.isListBody) {
       return (
         <div style={{ width: "100%" }}>{MPCore.render(this.props.data)}</div>

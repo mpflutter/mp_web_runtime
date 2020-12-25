@@ -21,8 +21,8 @@ export class CustomScrollView extends Component {
             JSON.stringify({
               type: "scroller",
               message: {
-                event: "onScrollToBottom"
-              }
+                event: "onScrollToBottom",
+              },
             })
           );
         }
@@ -43,7 +43,7 @@ export class CustomScrollView extends Component {
           flexDirection: "column",
           justifyContent: "flex-start",
           alignItems: "stretch",
-          minWidth: "100%"
+          minWidth: "100%",
         }}
       >
         {this.props.children}
