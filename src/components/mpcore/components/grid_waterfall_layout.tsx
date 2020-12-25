@@ -1,3 +1,4 @@
+import { cssPadding } from "../utils/geometry";
 import { DivContextProvider } from "./div_context";
 
 const clientWidth = document.body.clientWidth;
@@ -11,27 +12,50 @@ export interface SliverGridDelegateWithFixedCrossAxisCount {
 
 export const renderSliverGridDelegateWithFixedCrossAxisCount = (
   delegate: SliverGridDelegateWithFixedCrossAxisCount,
+  padding: string | undefined,
   children: any[]
 ): any[] => {
+  const gridViewPadding = padding ? cssPadding(padding) : {};
+  const paddingTop = gridViewPadding.paddingTop
+    ? parseInt(gridViewPadding.paddingTop)
+    : 0;
+  const paddingLeft = gridViewPadding.paddingLeft
+    ? parseInt(gridViewPadding.paddingLeft)
+    : 0;
+  const paddingRight = gridViewPadding.paddingRight
+    ? parseInt(gridViewPadding.paddingRight)
+    : 0;
+  const paddingBottom = gridViewPadding.paddingBottom
+    ? parseInt(gridViewPadding.paddingBottom)
+    : 0;
+
   return children.map((it, idx) => {
     const itemWidth =
       (clientWidth -
+        paddingLeft -
+        paddingRight -
         delegate.crossAxisSpacing * (delegate.crossAxisCount - 1)) /
       delegate.crossAxisCount;
+    const marginLeft =
+      idx % delegate.crossAxisCount === 0 ? `${paddingLeft}px` : "unset";
     const marginRight =
       (idx + 1) % delegate.crossAxisCount === 0
         ? "unset"
         : `${delegate.crossAxisSpacing}px`;
-    const marginTop =
+    let marginTop =
       idx / delegate.crossAxisCount >= 1
         ? `${delegate.mainAxisSpacing}px`
         : "unset";
+    if (idx < delegate.crossAxisCount && paddingTop > 0) {
+      marginTop = paddingTop + "px";
+    }
     return (
       <div
         key={`layout_${idx}`}
         style={{
           width: itemWidth + "px",
           height: itemWidth / delegate.childAspectRatio + "px",
+          marginLeft,
           marginRight,
           marginTop,
         }}
@@ -39,6 +63,9 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
         <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
           {it}
         </DivContextProvider>
+        {idx === children.length - 1 && paddingBottom > 0 ? (
+          <div style={{ width: "100%", height: paddingBottom + "px" }} />
+        ) : null}
       </div>
     );
   });
@@ -53,26 +80,52 @@ export interface SliverGridDelegateWithMaxCrossAxisExtent {
 
 export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
   delegate: SliverGridDelegateWithMaxCrossAxisExtent,
+  padding: string | undefined,
   children: any[]
 ): any[] => {
-  const crossAxisCount = Math.ceil(clientWidth / delegate.maxCrossAxisExtent);
+  const gridViewPadding = padding ? cssPadding(padding) : {};
+  const paddingTop = gridViewPadding.paddingTop
+    ? parseInt(gridViewPadding.paddingTop)
+    : 0;
+  const paddingLeft = gridViewPadding.paddingLeft
+    ? parseInt(gridViewPadding.paddingLeft)
+    : 0;
+  const paddingRight = gridViewPadding.paddingRight
+    ? parseInt(gridViewPadding.paddingRight)
+    : 0;
+  const paddingBottom = gridViewPadding.paddingBottom
+    ? parseInt(gridViewPadding.paddingBottom)
+    : 0;
+
+  const crossAxisCount = Math.ceil(
+    (clientWidth - paddingLeft - paddingRight) / delegate.maxCrossAxisExtent
+  );
 
   return children.map((it, idx) => {
     const itemWidth =
-      (clientWidth - delegate.crossAxisSpacing * (crossAxisCount - 1)) /
+      (clientWidth -
+        paddingLeft -
+        paddingRight -
+        delegate.crossAxisSpacing * (crossAxisCount - 1)) /
       crossAxisCount;
+    const marginLeft =
+      idx % crossAxisCount === 0 ? `${paddingLeft}px` : "unset";
     const marginRight =
       (idx + 1) % crossAxisCount === 0
         ? "unset"
         : `${delegate.crossAxisSpacing}px`;
-    const marginTop =
+    let marginTop =
       idx / crossAxisCount >= 1 ? `${delegate.mainAxisSpacing}px` : "unset";
+    if (idx < crossAxisCount && paddingTop > 0) {
+      marginTop = paddingTop + "px";
+    }
     return (
       <div
         key={`layout_${idx}`}
         style={{
           width: itemWidth + "px",
           height: itemWidth / delegate.childAspectRatio + "px",
+          marginLeft,
           marginRight,
           marginTop,
         }}
@@ -80,6 +133,9 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
         <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
           {it}
         </DivContextProvider>
+        {idx === children.length - 1 && paddingBottom > 0 ? (
+          <div style={{ width: "100%", height: paddingBottom + "px" }} />
+        ) : null}
       </div>
     );
   });
@@ -93,12 +149,26 @@ export interface SliverWaterfallDelegate {
 
 export const renderSliverWaterfallDelegate = (
   delegate: SliverWaterfallDelegate,
+  padding: string | undefined,
   children: any[]
 ): any[] => {
+  const gridViewPadding = padding ? cssPadding(padding) : {};
+  const paddingLeft = gridViewPadding.paddingLeft
+    ? parseInt(gridViewPadding.paddingLeft)
+    : 0;
+  const paddingRight = gridViewPadding.paddingRight
+    ? parseInt(gridViewPadding.paddingRight)
+    : 0;
+  const paddingBottom = gridViewPadding.paddingBottom
+    ? parseInt(gridViewPadding.paddingBottom)
+    : 0;
+
   const itemWidth =
-    (clientWidth - delegate.crossAxisSpacing * (delegate.crossAxisCount - 1)) /
+    (clientWidth -
+      paddingLeft -
+      paddingRight -
+      delegate.crossAxisSpacing * (delegate.crossAxisCount - 1)) /
     delegate.crossAxisCount;
-  let maxY = 0.0;
   let currentRowIndex = 0;
   let layoutCache: any[] = [];
 
@@ -136,19 +206,19 @@ export const renderSliverWaterfallDelegate = (
         currentY += delegate.mainAxisSpacing;
       }
     } else {
-      currentY = 0.0;
+      currentY = gridViewPadding?.paddingTop
+        ? parseInt(gridViewPadding.paddingTop)
+        : 0.0;
     }
     const size = {
       x:
+        paddingLeft +
         itemWidth * currentRowIndex +
         currentRowIndex * delegate.crossAxisSpacing,
       y: currentY,
       width: itemWidth,
       height: itemHeight,
     };
-    if (currentY + itemHeight > maxY) {
-      maxY = currentY + itemHeight;
-    }
     layoutCache[currentRowIndex] = size;
     currentRowIndex = (currentRowIndex + 1) % delegate.crossAxisCount;
     return size;
@@ -169,6 +239,9 @@ export const renderSliverWaterfallDelegate = (
         <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
           {it}
         </DivContextProvider>
+        {idx === layouts.length - 1 && paddingBottom > 0 ? (
+          <div style={{ width: "100%", height: paddingBottom + "px" }} />
+        ) : null}
       </div>
     );
   });

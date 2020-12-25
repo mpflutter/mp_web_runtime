@@ -2,6 +2,7 @@ import { Component } from "react";
 import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
+import { cssPadding } from "../utils/geometry";
 
 export class ListView extends Component<{ data: MPComponentsProps }> {
   _scrollListener: any;
@@ -22,8 +23,8 @@ export class ListView extends Component<{ data: MPComponentsProps }> {
             JSON.stringify({
               type: "scroller",
               message: {
-                event: "onScrollToBottom"
-              }
+                event: "onScrollToBottom",
+              },
             })
           );
         }
@@ -47,7 +48,8 @@ export class ListView extends Component<{ data: MPComponentsProps }> {
               : "column",
           justifyContent: "flex-start",
           alignItems: "stretch",
-          minWidth: "100%"
+          minWidth: "100%",
+          ...cssPadding(this.props.data.attributes.padding),
         }}
       >
         {this.props.children}

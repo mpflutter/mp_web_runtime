@@ -57,6 +57,7 @@ export class GridView extends Component<{ data: MPComponentsProps }> {
           ) {
             return renderSliverGridDelegateWithFixedCrossAxisCount(
               this.props.data.attributes.gridDelegate,
+              this.props.data.attributes.padding,
               this.props.children as any[]
             );
           } else if (
@@ -65,6 +66,7 @@ export class GridView extends Component<{ data: MPComponentsProps }> {
           ) {
             return renderSliverGridDelegateWithMaxCrossAxisExtent(
               this.props.data.attributes.gridDelegate,
+              this.props.data.attributes.padding,
               this.props.children as any[]
             );
           } else if (
@@ -73,6 +75,7 @@ export class GridView extends Component<{ data: MPComponentsProps }> {
           ) {
             return renderSliverWaterfallDelegate(
               this.props.data.attributes.gridDelegate,
+              this.props.data.attributes.padding,
               this.props.children as any[]
             );
           } else {
