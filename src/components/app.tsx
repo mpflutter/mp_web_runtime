@@ -11,6 +11,7 @@ import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
 import { cssColor } from "./mpcore/utils/color";
 import { applyPatch } from "fast-json-patch";
+import { Overlay } from "./mpcore/components/overlay";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -176,6 +177,11 @@ export class App extends Component<any, any> {
           : null}
         {this.state.data?.tabBar ? MPCore.render(this.state.data.tabBar) : null}
         {this.state.data ? <Body data={this.state.data.body} /> : null}
+        {this.state.data?.overlays?.length > 0
+          ? this.state.data.overlays.map((it: any, index: number) => (
+              <Overlay key={`overlay_${this.props.index}`} data={it} />
+            ))
+          : null}
       </div>
     );
   }

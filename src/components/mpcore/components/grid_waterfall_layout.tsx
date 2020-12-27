@@ -61,7 +61,9 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
           marginTop,
         }}
       >
-        <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
+        <DivContextProvider
+          style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
+        >
           {it}
         </DivContextProvider>
         {idx === children.length - 1 && paddingBottom > 0 ? (
@@ -134,7 +136,9 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
           marginTop,
         }}
       >
-        <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
+        <DivContextProvider
+          style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
+        >
           {it}
         </DivContextProvider>
         {idx === children.length - 1 && paddingBottom > 0 ? (
@@ -246,7 +250,9 @@ export const renderSliverWaterfallDelegate = (
               height: layouts[idx].height + "px",
             }}
           >
-            <DivContextProvider style={{ minWidth: "100%", minHeight: "100%" }}>
+            <DivContextProvider
+              style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
+            >
               {it}
             </DivContextProvider>
             {idx === layouts.length - 1 && paddingBottom > 0 ? (
