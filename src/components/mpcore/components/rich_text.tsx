@@ -17,6 +17,7 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
           WebkitLineClamp: this.props.data.attributes.maxLines.toString(),
           WebkitBoxOrient: "vertical",
           fontSize: "11px",
+          overflowWrap: "anywhere",
         },
       };
     }
