@@ -18,6 +18,8 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
           WebkitBoxOrient: "vertical",
           fontSize: "11px",
           overflowWrap: "anywhere",
+          wordBreak: "break-all",
+          wordWrap: "break-word",
         },
       };
     }
