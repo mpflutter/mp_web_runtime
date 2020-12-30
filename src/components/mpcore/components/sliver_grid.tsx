@@ -60,12 +60,12 @@ export class SliverGrid extends Component<{ data: MPComponentsProps }> {
           ) {
             return renderSliverWaterfallDelegate(
               this.props.data.attributes.gridDelegate,
-              this.props.data.attributes.padding,
+              undefined,
               this.props.children as any[],
-              // {
-              //   parentWidth:
-              //     document.body.clientWidth - paddingLeft - paddingRight,
-              // }
+              {
+                parentWidth:
+                  document.body.clientWidth - paddingLeft - paddingRight,
+              }
             );
           } else {
             return [];

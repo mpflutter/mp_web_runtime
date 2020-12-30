@@ -15,6 +15,7 @@ export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
     ) {
       return <DivContextConsumer>{this.props.children}</DivContextConsumer>;
     }
+    
     return (
       <DivContextConsumer
         style={{
@@ -40,7 +41,7 @@ export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
             this.props.data.attributes.isTight
           ),
           overflow:
-            this.props.data.attributes.scrollable === true ? "scroll" : "hidden"
+            this.props.data.attributes.scrollable === true ? "scroll" : "visible"
         }}
       >
         {this.props.children}

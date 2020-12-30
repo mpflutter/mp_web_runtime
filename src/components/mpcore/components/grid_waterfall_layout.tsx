@@ -237,7 +237,7 @@ export const renderSliverWaterfallDelegate = (
   });
 
   return (
-    <div style={{ width: "100%", height: maxY + "px" }}>
+    <div style={{ position: "relative", width: "100%", height: maxY + "px" }}>
       {children.map((it, idx) => {
         return (
           <div
