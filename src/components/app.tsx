@@ -12,6 +12,7 @@ import { WebDialogs } from "./mpcore/components/web_dialogs";
 import { cssColor } from "./mpcore/utils/color";
 import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
+import { ScrollListener } from "./mpcore/scroll_listener";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -182,6 +183,7 @@ export class App extends Component<any, any> {
               <Overlay key={`overlay_${this.props.index}`} data={it} />
             ))
           : null}
+        <ScrollListener />
       </div>
     );
   }
