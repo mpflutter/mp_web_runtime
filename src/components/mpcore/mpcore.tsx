@@ -33,6 +33,7 @@ import { TabBar } from "./components/tab_bar";
 import { GridView, SliverWaterfallItem } from "./components/grid_view";
 import { SliverGrid } from "./components/sliver_grid";
 import { Wrap } from "./components/wrap";
+import { SliverPersistentHeader } from "./components/sliver_persistent_header";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -69,6 +70,7 @@ export class MPCore {
     grid_view: GridView,
     wrap: Wrap,
     sliver_waterfall_item: SliverWaterfallItem,
+    sliver_persistent_header: SliverPersistentHeader,
   };
 
   static plugins: MPPlugin[] = [];
