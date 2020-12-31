@@ -3,7 +3,6 @@ import { MPComponentsProps } from "../component";
 import { cssPadding } from "../utils/geometry";
 
 export class ListView extends Component<{ data: MPComponentsProps }> {
-
   render() {
     return (
       <div
@@ -15,7 +14,8 @@ export class ListView extends Component<{ data: MPComponentsProps }> {
               : "column",
           justifyContent: "flex-start",
           alignItems: "stretch",
-          minWidth: "100%",
+          minWidth: this.props.data.attributes.scrollDirection !== "Axis.horizontal" ? "100%" : "unset",
+          minHeight: this.props.data.attributes.scrollDirection === "Axis.horizontal" ? "100%" : "unset",
           ...cssPadding(this.props.data.attributes.padding),
         }}
       >

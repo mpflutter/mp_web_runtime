@@ -1,8 +1,9 @@
 import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
-import { cssWidth, cssHeight } from "../utils/geometry";
+import { cssWidth, cssHeight, cssOffset } from "../utils/geometry";
 import { DivContextConsumer } from "./div_context";
+import { cssColor } from "../utils/color";
 
 export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
   render() {
@@ -15,7 +16,7 @@ export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
     ) {
       return <DivContextConsumer>{this.props.children}</DivContextConsumer>;
     }
-    
+
     return (
       <DivContextConsumer
         style={{
@@ -41,7 +42,33 @@ export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
             this.props.data.attributes.isTight
           ),
           overflow:
-            this.props.data.attributes.scrollable === true ? "scroll" : "visible"
+            this.props.data.attributes.scrollable === true
+              ? "scroll"
+              : "visible",
+          boxShadow:
+            this.props.data.attributes.scrollable === true &&
+            this.props.data.children[0]?.attributes?.decoration?.boxShadow?.[0]
+              ? `${
+                  cssOffset(
+                    this.props.data.children[0].attributes.decoration
+                      .boxShadow?.[0].offset
+                  )?.dx
+                }px ${
+                  cssOffset(
+                    this.props.data.children[0].attributes.decoration
+                      .boxShadow?.[0].offset
+                  )?.dy
+                }px ${
+                  this.props.data.children[0].attributes.decoration
+                    .boxShadow?.[0].blurRadius
+                }px ${
+                  this.props.data.children[0].attributes.decoration
+                    .boxShadow?.[0].spreadRadius
+                }px ${cssColor(
+                  this.props.data.children[0].attributes.decoration
+                    .boxShadow?.[0].color
+                )}`
+              : undefined,
         }}
       >
         {this.props.children}
