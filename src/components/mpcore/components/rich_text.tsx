@@ -20,7 +20,10 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
           overflowWrap: "anywhere",
           wordBreak: "break-all",
           wordWrap: "break-word",
-          inlineSize: "max-content",
+          inlineSize:
+            this.props.data.attributes.inline === true
+              ? "max-content"
+              : undefined,
         },
       };
     }

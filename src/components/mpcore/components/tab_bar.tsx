@@ -23,34 +23,18 @@ export class TabBar extends Component<{
   }
 
   render() {
-    const nested = this.props.nested;
     return (
       <div
-        style={
-          nested
-            ? {
-                backgroundColor: "white",
-                position: "sticky",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                top: "0px",
-                left: "0px",
-                right: "0px",
-                height: "50px",
-              }
-            : {
-                backgroundColor: "white",
-                position: "fixed",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                top: "0px",
-                left: "0px",
-                right: "0px",
-                height: "50px",
-              }
-        }
+        style={{
+          backgroundColor: "white",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          top: "0px",
+          left: "0px",
+          right: "0px",
+          height: "50px",
+        }}
       >
         {this.props.data.children.map((it, idx) => {
           return (
