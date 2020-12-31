@@ -67,10 +67,16 @@ export class DivContextConsumer extends Component<any> {
               (this.props.el ?? "div") as any,
               {
                 ...this.props,
-                style: {
-                  ...divContext.style,
-                  ...this.props.style,
-                },
+                style: (() => {
+                  let style = {
+                    ...divContext.style,
+                    ...this.props.style,
+                  };
+                  if (divContext.style.overflow === "hidden") {
+                    style.overflow = "hidden";
+                  }
+                  return style;
+                })(),
               },
               this.props.children
             )}
