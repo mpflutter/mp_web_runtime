@@ -4,6 +4,9 @@ import { MPCore } from "../mpcore";
 
 export class Body extends Component<{ data: any }> {
   render() {
+    if (this.props.data.name === "constrained_box") {
+      return MPCore.render(this.props.data.children[0]);
+    }
     if (this.props.data.isListBody) {
       return (
         <div style={{ width: "100%", maxWidth: "100%" }}>

@@ -161,6 +161,8 @@ export class App extends Component<any, any> {
   }
 
   render() {
+    console.log(this.state.data);
+    
     App.isListBody = this.state.data?.isListBody === true;
     App.setupBodyScrollBehavior();
     return (
