@@ -162,7 +162,7 @@ export class App extends Component<any, any> {
 
   render() {
     console.log(this.state.data);
-    
+
     App.isListBody = this.state.data?.isListBody === true;
     App.setupBodyScrollBehavior();
     return (
@@ -175,15 +175,34 @@ export class App extends Component<any, any> {
             : "unset",
         }}
       >
-        {this.state.data?.header
-          ? MPCore.render(this.state.data?.header)
-          : null}
+        {this.state.data?.header ? (
+          <div
+            style={{
+              position: "sticky",
+              top: "-1px",
+              zIndex: 2,
+            }}
+          >
+            {MPCore.render(this.state.data?.header)}
+          </div>
+        ) : null}
         {this.state.data?.tabBar ? (
           <div style={{ position: "sticky", top: "-1px", zIndex: 1 }}>
             {MPCore.render(this.state.data.tabBar)}
           </div>
         ) : null}
         {this.state.data ? <Body data={this.state.data.body} /> : null}
+        {this.state.data?.footer ? (
+          <div
+            style={{
+              position: "sticky",
+              bottom: "-1px",
+              zIndex: 2,
+            }}
+          >
+            {MPCore.render(this.state.data?.footer)}
+          </div>
+        ) : null}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
               <Overlay key={`overlay_${this.props.index}`} data={it} />

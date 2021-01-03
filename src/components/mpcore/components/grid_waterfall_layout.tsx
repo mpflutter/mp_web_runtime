@@ -47,8 +47,12 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
       idx / delegate.crossAxisCount >= 1
         ? `${delegate.mainAxisSpacing}px`
         : "unset";
+    let marginBottom = "unset";
     if (idx < delegate.crossAxisCount && paddingTop > 0) {
       marginTop = paddingTop + "px";
+    }
+    if (idx === children.length - 1 && paddingBottom > 0) {
+      marginBottom = paddingBottom + "px";
     }
     return (
       <div
@@ -59,6 +63,7 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
           marginLeft,
           marginRight,
           marginTop,
+          marginBottom,
         }}
       >
         <DivContextProvider
@@ -66,9 +71,6 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
         >
           {it}
         </DivContextProvider>
-        {idx === children.length - 1 && paddingBottom > 0 ? (
-          <div style={{ width: "100%", height: paddingBottom + "px" }} />
-        ) : null}
       </div>
     );
   });
@@ -122,8 +124,12 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
         : `${delegate.crossAxisSpacing}px`;
     let marginTop =
       idx / crossAxisCount >= 1 ? `${delegate.mainAxisSpacing}px` : "unset";
+    let marginBottom = "unset";
     if (idx < crossAxisCount && paddingTop > 0) {
       marginTop = paddingTop + "px";
+    }
+    if (idx === children.length - 1 && paddingBottom > 0) {
+      marginBottom = paddingBottom + "px";
     }
     return (
       <div
@@ -134,6 +140,7 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
           marginLeft,
           marginRight,
           marginTop,
+          marginBottom,
         }}
       >
         <DivContextProvider
@@ -141,9 +148,6 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
         >
           {it}
         </DivContextProvider>
-        {idx === children.length - 1 && paddingBottom > 0 ? (
-          <div style={{ width: "100%", height: paddingBottom + "px" }} />
-        ) : null}
       </div>
     );
   });
@@ -247,7 +251,7 @@ export const renderSliverWaterfallDelegate = (
               left: layouts[idx].x + "px",
               top: layouts[idx].y + "px",
               width: layouts[idx].width + "px",
-              height: layouts[idx].height + "px",
+              height: layouts[idx].height + paddingBottom + "px",
             }}
           >
             <DivContextProvider
@@ -255,9 +259,6 @@ export const renderSliverWaterfallDelegate = (
             >
               {it}
             </DivContextProvider>
-            {idx === layouts.length - 1 && paddingBottom > 0 ? (
-              <div style={{ width: "100%", height: paddingBottom + "px" }} />
-            ) : null}
           </div>
         );
       })}
