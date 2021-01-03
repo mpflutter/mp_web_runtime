@@ -175,7 +175,7 @@ export class App extends Component<any, any> {
             : "unset",
         }}
       >
-        {this.state.data?.header ? (
+        {this.state.data?.appBar ? (
           <div
             style={{
               position: "sticky",
@@ -183,16 +183,19 @@ export class App extends Component<any, any> {
               zIndex: 2,
             }}
           >
-            {MPCore.render(this.state.data?.header)}
+            {MPCore.render(this.state.data?.appBar)}
           </div>
         ) : null}
+        {this.state.data?.header
+          ? MPCore.render(this.state.data?.header)
+          : null}
         {this.state.data?.tabBar ? (
           <div style={{ position: "sticky", top: "-1px", zIndex: 1 }}>
             {MPCore.render(this.state.data.tabBar)}
           </div>
         ) : null}
         {this.state.data ? <Body data={this.state.data.body} /> : null}
-        {this.state.data?.footer ? (
+        {this.state.data?.bottomBar ? (
           <div
             style={{
               position: "sticky",
@@ -200,7 +203,7 @@ export class App extends Component<any, any> {
               zIndex: 2,
             }}
           >
-            {MPCore.render(this.state.data?.footer)}
+            {MPCore.render(this.state.data?.bottomBar)}
           </div>
         ) : null}
         {this.state.data?.overlays?.length > 0
