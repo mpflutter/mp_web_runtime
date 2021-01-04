@@ -40,16 +40,40 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
   }
 
   render() {
-    return (
-      <div
-        style={{
-          minWidth: "-webkit-fill-available",
-          minHeight: "100%",
-          ...this.renderDecoration(),
-        }}
-      >
-        {this.props.children}
-      </div>
-    );
+    if (
+      this.props.data.attributes.position === "DecorationPosition.foreground"
+    ) {
+      console.log(this.props.data);
+      console.log(this.renderDecoration());
+      
+
+      return (
+        <div style={{ position: "relative" }}>
+          {this.props.children}
+          <div
+            style={{
+              position: "absolute",
+              top: "0px",
+              left: "0px",
+              minWidth: "100%",
+              minHeight: "100%",
+              ...this.renderDecoration(),
+            }}
+          ></div>
+        </div>
+      );
+    } else {
+      return (
+        <div
+          style={{
+            minWidth: "-webkit-fill-available",
+            minHeight: "100%",
+            ...this.renderDecoration(),
+          }}
+        >
+          {this.props.children}
+        </div>
+      );
+    }
   }
 }
