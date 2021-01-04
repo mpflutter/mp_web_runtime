@@ -16,8 +16,6 @@ export class ScrollListener extends React.Component {
             return;
           }
           this._scrollToBottomLastCall = new Date().getTime() + 2000;
-          console.log('onScrollToBottom');
-          
           App.callbackChannel(
             JSON.stringify({
               type: "scroller",

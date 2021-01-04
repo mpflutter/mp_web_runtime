@@ -206,6 +206,20 @@ export class App extends Component<any, any> {
             {MPCore.render(this.state.data?.bottomBar)}
           </div>
         ) : null}
+        {this.state.data?.floatingBody ? (
+          <div
+            style={{
+              position: "fixed",
+              left: 0,
+              top: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 2,
+            }}
+          >
+            {MPCore.render(this.state.data?.floatingBody)}
+          </div>
+        ) : null}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
               <Overlay key={`overlay_${this.props.index}`} data={it} />
