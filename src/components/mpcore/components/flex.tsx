@@ -56,7 +56,7 @@ export class Flex extends Component<{ data: MPComponentsProps }> {
               this.props.data.attributes.direction === "Axis.horizontal" &&
               this.props.data.attributes.mainAxisSize === "MainAxisSize.max"
             ) {
-              return "100%";
+              return "unset";
             }
           })(),
           minHeight: (() => {
@@ -64,7 +64,7 @@ export class Flex extends Component<{ data: MPComponentsProps }> {
               this.props.data.attributes.direction === "Axis.vertical" &&
               this.props.data.attributes.mainAxisSize === "MainAxisSize.max"
             ) {
-              return "100%";
+              return "unset";
             }
           })()
         }}
