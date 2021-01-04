@@ -161,7 +161,7 @@ export class App extends Component<any, any> {
   }
 
   render() {
-    console.log(this.state.data);
+    // console.log(this.state.data);
 
     App.isListBody = this.state.data?.isListBody === true;
     App.setupBodyScrollBehavior();
@@ -194,7 +194,12 @@ export class App extends Component<any, any> {
             {MPCore.render(this.state.data.tabBar)}
           </div>
         ) : null}
-        {this.state.data ? <Body data={this.state.data.body} /> : null}
+        {this.state.data ? (
+          <Body
+            isListBody={this.state.data.isListBody}
+            data={this.state.data.body}
+          />
+        ) : null}
         {this.state.data?.bottomBar ? (
           <div
             style={{
