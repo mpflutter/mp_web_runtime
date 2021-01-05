@@ -287,7 +287,7 @@ class Router {
       window.history.pushState(
         message.route,
         "",
-        `/?route=${message.route.name}`
+        `?route=${message.route.name}`
       );
     }
   }
