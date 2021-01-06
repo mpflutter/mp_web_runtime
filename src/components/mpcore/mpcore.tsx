@@ -83,7 +83,7 @@ export class MPCore {
   }
 
   static render(data: MPComponentsProps, key?: string): ReactElement | null {
-    if (!this.components[data.name]) return null;
+    if (!data || !this.components[data.name]) return null;
     return createElement(
       this.components[data.name],
       { key, data: data } as any,
