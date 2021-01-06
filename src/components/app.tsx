@@ -161,8 +161,11 @@ export class App extends Component<any, any> {
   }
 
   render() {
-    // console.log(this.state.data);
-
+    if (this.state.data?.name) {
+      document.title = this.state.data.name;
+    } else {
+      document.title = "";
+    }
     App.isListBody = this.state.data?.isListBody === true;
     App.setupBodyScrollBehavior();
     return (
