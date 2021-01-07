@@ -34,6 +34,8 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
           backgroundColor: this.props.data.attributes.backgroundColor
             ? cssColor(this.props.data.attributes.backgroundColor)
             : "unset",
+          overflow:
+            this.props.data.attributes.isListBody === true ? "unset" : "hidden",
         }}
       >
         {this.props.data.attributes.appBar ? (
@@ -55,7 +57,10 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
         {this.props.data.attributes.tabBar ? (
           <div
             style={{
-              position: "sticky",
+              position:
+                this.props.data.attributes.isListBody === true
+                  ? "sticky"
+                  : "unset",
               top: -1 + appBarHeight + "px",
               zIndex: 1,
             }}
@@ -63,11 +68,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
             {MPCore.render(this.props.data.attributes.tabBar)}
           </div>
         ) : null}
-        {
-          <div style={{ width: "100%", maxWidth: "100%" }}>
-            {MPCore.render(this.props.data.attributes.body)}
-          </div>
-        }
+        {MPCore.render(this.props.data.attributes.body)}
         {this.props.data.attributes?.bottomBar ? (
           <div
             style={{

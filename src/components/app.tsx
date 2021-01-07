@@ -11,6 +11,7 @@ import { WebDialogs } from "./mpcore/components/web_dialogs";
 import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
+import { ScrollBehavior } from "./mpcore/scroll_behavior";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -22,8 +23,6 @@ export class App extends Component<any, any> {
 
   state: any = {};
   lastFrameData: any;
-  static isDialogDisplaying: boolean = false;
-  static isListBody: boolean = false;
 
   componentDidMount() {
     if ((window as any).mpflutterUseSocket === 1) {
@@ -148,22 +147,9 @@ export class App extends Component<any, any> {
     }
   }
 
-  static setupBodyScrollBehavior() {
-    // if (App.isDialogDisplaying) {
-    //   document.body.style.setProperty("overflow", "hidden");
-    // } else if (this.isListBody) {
-    //   document.body.style.setProperty("overflow", "unset");
-    // } else {
-    //   document.body.style.setProperty("overflow", "hidden");
-    // }
-  }
-
   render() {
-    console.log(this.state.data);
-    // App.isListBody = this.state.data?.isListBody === true;
-    // App.setupBodyScrollBehavior();
     return (
-      <div id="app">
+      <span>
         {MPCore.render(this.state.data?.scaffold)}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
@@ -171,12 +157,16 @@ export class App extends Component<any, any> {
             ))
           : null}
         <ScrollListener />
-      </div>
+        <ScrollBehavior
+          displayingDialog={this.state.isDialogDisplaying}
+          scaffold={this.state.data?.scaffold}
+        />
+      </span>
     );
   }
 
-  static attachDialog(element: any, touchable: boolean = true) {
-    this.isDialogDisplaying = true;
+  attachDialog(element: any, touchable: boolean = true) {
+    this.setState({ isDialogDisplaying: true });
     if (touchable) {
       ReactDOM.render(
         <div style={{ pointerEvents: "auto" }}>{element}</div>,
@@ -185,13 +175,11 @@ export class App extends Component<any, any> {
     } else {
       ReactDOM.render(element, document.getElementById("mp_dialog"));
     }
-    App.setupBodyScrollBehavior();
   }
 
-  static detachDialog() {
-    this.isDialogDisplaying = false;
+  detachDialog() {
+    this.setState({ isDialogDisplaying: false });
     ReactDOM.unmountComponentAtNode(document.getElementById("mp_dialog")!);
-    App.setupBodyScrollBehavior();
   }
 }
 
