@@ -11,10 +11,18 @@ export class Image extends Component<{ data: MPComponentsProps }> {
         el="img"
         style={{
           display: "flex",
-          minWidth: "100%",
-          maxWidth: "100%",
-          minHeight: "100%",
-          maxHeight: "100%",
+          minWidth: this.props.data.attributes.width
+            ? `${this.props.data.attributes.width}px`
+            : "100%",
+          maxWidth: this.props.data.attributes.width
+            ? `${this.props.data.attributes.width}px`
+            : "100%",
+          minHeight: this.props.data.attributes.height
+            ? `${this.props.data.attributes.height}px`
+            : "100%",
+          maxHeight: this.props.data.attributes.height
+            ? `${this.props.data.attributes.height}px`
+            : "100%",
           objectFit: (() => {
             if (!this.props.data.attributes.fit) return "cover";
             switch (this.props.data.attributes.fit) {
@@ -33,7 +41,7 @@ export class Image extends Component<{ data: MPComponentsProps }> {
               default:
                 return "contain";
             }
-          })()
+          })(),
         }}
         src={(() => {
           if (this.props.data.attributes.src) {

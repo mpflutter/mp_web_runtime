@@ -2,14 +2,12 @@ import { Component } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import { Body } from "./mpcore/components/body";
 import {
   DivContextProvider,
   DivContextConsumer,
 } from "./mpcore/components/div_context";
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
-import { cssColor } from "./mpcore/utils/color";
 import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
@@ -151,83 +149,22 @@ export class App extends Component<any, any> {
   }
 
   static setupBodyScrollBehavior() {
-    if (App.isDialogDisplaying) {
-      document.body.style.setProperty("overflow", "hidden");
-    } else if (this.isListBody) {
-      document.body.style.setProperty("overflow", "unset");
-    } else {
-      document.body.style.setProperty("overflow", "hidden");
-    }
+    // if (App.isDialogDisplaying) {
+    //   document.body.style.setProperty("overflow", "hidden");
+    // } else if (this.isListBody) {
+    //   document.body.style.setProperty("overflow", "unset");
+    // } else {
+    //   document.body.style.setProperty("overflow", "hidden");
+    // }
   }
 
   render() {
-    if (this.state.data?.name) {
-      document.title = this.state.data.name;
-    } else {
-      document.title = "";
-    }
-    App.isListBody = this.state.data?.isListBody === true;
-    App.setupBodyScrollBehavior();
+    console.log(this.state.data);
+    // App.isListBody = this.state.data?.isListBody === true;
+    // App.setupBodyScrollBehavior();
     return (
-      <div
-        id="app"
-        style={{
-          height: this.state.data?.isListBody === true ? "unset" : "100%",
-          backgroundColor: this.state.data?.backgroundColor
-            ? cssColor(this.state.data?.backgroundColor)
-            : "unset",
-        }}
-      >
-        {this.state.data?.appBar ? (
-          <div
-            style={{
-              position: "sticky",
-              top: "-1px",
-              zIndex: 2,
-            }}
-          >
-            {MPCore.render(this.state.data?.appBar)}
-          </div>
-        ) : null}
-        {this.state.data?.header
-          ? MPCore.render(this.state.data?.header)
-          : null}
-        {this.state.data?.tabBar ? (
-          <div style={{ position: "sticky", top: "-1px", zIndex: 1 }}>
-            {MPCore.render(this.state.data.tabBar)}
-          </div>
-        ) : null}
-        {this.state.data ? (
-          <Body
-            isListBody={this.state.data.isListBody}
-            data={this.state.data.body}
-          />
-        ) : null}
-        {this.state.data?.bottomBar ? (
-          <div
-            style={{
-              position: "sticky",
-              bottom: "-1px",
-              zIndex: 2,
-            }}
-          >
-            {MPCore.render(this.state.data?.bottomBar)}
-          </div>
-        ) : null}
-        {this.state.data?.floatingBody ? (
-          <div
-            style={{
-              position: "fixed",
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 2,
-            }}
-          >
-            {MPCore.render(this.state.data?.floatingBody)}
-          </div>
-        ) : null}
+      <div id="app">
+        {MPCore.render(this.state.data?.scaffold)}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
               <Overlay key={`overlay_${this.props.index}`} data={it} />
