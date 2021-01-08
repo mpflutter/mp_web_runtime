@@ -37,10 +37,13 @@ export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
             this.props.data.attributes.maxWidth,
             this.props.data.attributes.isTight
           ),
-          maxHeight: cssHeight(
-            this.props.data.attributes.maxHeight,
-            this.props.data.attributes.isTight
-          ),
+          maxHeight:
+            this.props.data.attributes.scrollable === true
+              ? "unset"
+              : cssHeight(
+                  this.props.data.attributes.maxHeight,
+                  this.props.data.attributes.isTight
+                ),
           overflow:
             this.props.data.attributes.scrollable === true
               ? "scroll"

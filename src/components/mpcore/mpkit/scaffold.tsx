@@ -27,7 +27,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
       <div
         id="mp_scaffold"
         style={{
-          marginTop: appBarHeight + "px",
+          paddingTop: appBarHeight + "px",
           height:
             this.props.data.attributes.isListBody === true
               ? "unset"
