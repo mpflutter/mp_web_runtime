@@ -2,6 +2,7 @@ import { Component } from "react";
 import { MPComponentsProps } from "../component";
 import { MPCore } from "../mpcore";
 import { cssColor } from "../utils/color";
+import { cssWidth } from "../utils/geometry";
 
 export class MPScaffold extends Component<{ data: MPComponentsProps }> {
   componentDidMount() {
@@ -81,19 +82,35 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
           </div>
         ) : null}
         {this.props.data.attributes?.floatingBody ? (
-          <div
-            style={{
-              position: "fixed",
-              left: 0,
-              top: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 2,
-            }}
-          >
-            {MPCore.render(this.props.data.attributes.floatingBody)}
-          </div>
+          <FloatingBody data={this.props.data.attributes?.floatingBody} />
         ) : null}
+      </div>
+    );
+  }
+}
+
+export class FloatingBody extends Component<{
+  data: MPComponentsProps;
+}> {
+  render() {
+    let positioned = this.props.data;
+    if (!positioned || positioned.name !== "positioned") {
+      return null;
+    }
+    return (
+      <div
+        style={{
+          position: "fixed",
+          left: cssWidth(positioned.attributes.left),
+          top: cssWidth(positioned.attributes.top),
+          right: cssWidth(positioned.attributes.right),
+          bottom: cssWidth(positioned.attributes.bottom),
+          width: cssWidth(positioned.attributes.width),
+          height: cssWidth(positioned.attributes.height),
+          backgroundColor: cssColor(this.props.data.attributes.backgroundColor),
+        }}
+      >
+        {this.props.data.children?.map((it) => MPCore.render(it))}
       </div>
     );
   }

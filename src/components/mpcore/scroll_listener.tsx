@@ -10,7 +10,7 @@ export class ScrollListener extends React.Component {
       this._scrollListener = () => {
         if (
           window.pageYOffset + window.innerHeight >=
-          window.document.body.scrollHeight
+          window.document.body.scrollHeight - 200
         ) {
           if (this._scrollToBottomLastCall > new Date().getTime()) {
             return;
