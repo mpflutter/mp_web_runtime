@@ -1,7 +1,7 @@
 import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
-import { cssTextStyle } from "../utils/text";
+import { cssTextAlign, cssTextStyle } from "../utils/text";
 import { DivContextConsumer } from "./div_context";
 
 export class RichText extends Component<{ data: MPComponentsProps }> {
@@ -13,6 +13,7 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
         ...{
           overflow: "hidden",
           textOverflow: "ellipsis",
+          textAlign: cssTextAlign(this.props.data.attributes.textAlign),
           display: "-webkit-box",
           WebkitLineClamp: this.props.data.attributes.maxLines.toString(),
           WebkitBoxOrient: "vertical",
@@ -25,6 +26,24 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
             this.props.data.attributes.inline === true
               ? "max-content"
               : undefined,
+        },
+      };
+    } else {
+      style = {
+        ...style,
+        ...{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          textAlign: cssTextAlign(this.props.data.attributes.textAlign),
+          display: "-webkit-box",
+          WebkitLineClamp: "1",
+          WebkitBoxOrient: "vertical",
+          fontSize: "11px",
+          overflowWrap: "anywhere",
+          wordBreak: "break-all",
+          wordWrap: "break-word",
+          whiteSpace: "pre-line",
+          inlineSize: "max-content",
         },
       };
     }
