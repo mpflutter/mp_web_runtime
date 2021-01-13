@@ -36,14 +36,17 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
           textOverflow: "ellipsis",
           textAlign: cssTextAlign(this.props.data.attributes.textAlign),
           display: "-webkit-box",
-          WebkitLineClamp: "1",
+          WebkitLineClamp: "99999",
           WebkitBoxOrient: "vertical",
           fontSize: "11px",
           overflowWrap: "anywhere",
           wordBreak: "break-all",
           wordWrap: "break-word",
           whiteSpace: "pre-line",
-          inlineSize: "max-content",
+          inlineSize:
+            this.props.data.attributes.inline === true
+              ? "max-content"
+              : undefined,
         },
       };
     }
