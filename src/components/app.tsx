@@ -212,11 +212,16 @@ class Router {
 
   static didPush(message: any) {
     if (window) {
-      window.history.pushState(
-        message.route,
-        "",
-        `?route=${message.route.name}`
-      );
+      let routeUrl: string = message.route.name;
+      if (routeUrl.indexOf("?") > 0) {
+        let path = routeUrl.split("?")[0];
+        let others = routeUrl
+          .split("?")
+          .filter((it, idx) => idx > 0)
+          .join("?");
+        routeUrl = `${path}${encodeURIComponent(`?${others}`)}`;
+      }
+      window.history.pushState(message.route, "", `?route=${routeUrl}`);
     }
   }
 
