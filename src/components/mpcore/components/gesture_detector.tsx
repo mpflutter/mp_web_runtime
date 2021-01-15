@@ -10,16 +10,17 @@ export class GestureDetector extends Component<{ data: MPComponentsProps }> {
       <DivContextConsumer
         onClick={
           this.props.data.attributes.onTap
-            ? () => {
+            ? (e: any) => {
                 App.callbackChannel(
                   JSON.stringify({
                     type: "gesture_detector",
                     message: {
                       event: "onTap",
-                      target: this.props.data.attributes.onTap
-                    }
+                      target: this.props.data.attributes.onTap,
+                    },
                   })
                 );
+                e.stopPropagation();
               }
             : null
         }
