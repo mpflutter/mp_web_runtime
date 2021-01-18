@@ -2,11 +2,15 @@ import { Component, createContext, createElement } from "react";
 import { MPComponentsProps } from "../component";
 import React from "react";
 
-export const DivContext = createContext<{ style: any }>({ style: {} });
+export const DivContext = createContext<{ style: any; onClick: any }>({
+  style: {},
+  onClick: undefined,
+});
 
 export class DivContextProvider extends Component<{
   data?: MPComponentsProps;
   style?: any;
+  onClick?: any;
 }> {
   render() {
     if (!this.props.children || (this.props.children as any[]).length <= 0) {
@@ -19,6 +23,7 @@ export class DivContextProvider extends Component<{
                   ...divContext.style,
                   ...this.props.style,
                 },
+                onClick: divContext.onClick,
               }}
             >
               <DivContextConsumer
@@ -42,6 +47,7 @@ export class DivContextProvider extends Component<{
                   ...divContext.style,
                   ...this.props.style,
                 },
+                onClick: divContext.onClick,
               }}
             >
               {this.props.children}
@@ -61,11 +67,13 @@ export class DivContextConsumer extends Component<any> {
           <DivContext.Provider
             value={{
               style: {},
+              onClick: undefined,
             }}
           >
             {createElement(
               (this.props.el ?? "div") as any,
               {
+                onClick: divContext.onClick,
                 ...this.props,
                 style: (() => {
                   let style = {
