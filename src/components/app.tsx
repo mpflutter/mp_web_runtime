@@ -12,6 +12,7 @@ import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
 import { ScrollBehavior } from "./mpcore/scroll_behavior";
+import { DeliverContext } from "./mpcore/deliver_context";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -150,10 +151,14 @@ export class App extends Component<any, any> {
   render() {
     return (
       <span>
-        {MPCore.render(this.state.data?.scaffold)}
+        {MPCore.render(this.state.data?.scaffold, new DeliverContext())}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
-              <Overlay key={`overlay_${this.props.index}`} data={it} />
+              <Overlay
+                key={`overlay_${this.props.index}`}
+                data={it}
+                deliverContext={new DeliverContext()}
+              />
             ))
           : null}
         <ScrollListener />

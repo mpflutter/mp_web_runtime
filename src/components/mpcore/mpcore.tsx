@@ -35,6 +35,7 @@ import { SliverGrid } from "./components/sliver_grid";
 import { Wrap } from "./components/wrap";
 import { SliverPersistentHeader } from "./components/sliver_persistent_header";
 import { MPKit } from "./mpkit/mpkit";
+import { DeliverContext } from "./deliver_context";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -84,13 +85,17 @@ export class MPCore {
     this.plugins.push(plugin);
   }
 
-  static render(data: MPComponentsProps, key?: string): ReactElement | null {
+  static render(
+    data: MPComponentsProps,
+    deliverContext: DeliverContext,
+    key?: string
+  ): ReactElement | null {
     if (!data || !this.components[data.name]) return null;
     return createElement(
       this.components[data.name],
-      { key, data: data } as any,
+      { key, data: data, deliverContext: deliverContext } as any,
       data.children?.map((it: any, index: number) =>
-        this.render(it, `item_${index}`)
+        this.render(it, deliverContext, `item_${index}`)
       )
     );
   }

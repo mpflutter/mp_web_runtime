@@ -4,9 +4,11 @@ import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
 import { MPCore } from "../mpcore";
 import { App } from "../../app";
+import { DeliverContext } from "../deliver_context";
 
 export class Overlay extends Component<{
   data: MPComponentsProps;
+  deliverContext: DeliverContext;
 }> {
   render() {
     return (
@@ -32,7 +34,7 @@ export class Overlay extends Component<{
           e.stopPropagation();
         }}
       >
-        {MPCore.render(this.props.data.children[0])}
+        {MPCore.render(this.props.data.children[0], this.props.deliverContext)}
       </div>
     );
   }

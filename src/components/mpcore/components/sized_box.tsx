@@ -1,23 +1,19 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { MPComponentsProps } from "../component";
 import { cssWidth, cssHeight } from "../utils/geometry";
-import { DivContextConsumer } from "./div_context";
+import { DeliverContext } from "../deliver_context";
 
-export class SizedBox extends Component<{ data: MPComponentsProps }> {
-  render() {
-    return (
-      <DivContextConsumer
-        style={{
-          display: "flex",
-          minWidth: cssWidth(this.props.data.attributes.width),
-          minHeight: cssHeight(this.props.data.attributes.height),
-          maxWidth: cssWidth(this.props.data.attributes.width),
-          maxHeight: cssHeight(this.props.data.attributes.height)
-        }}
-      >
-        {this.props.children}
-      </DivContextConsumer>
-    );
+export class SizedBox extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
+  render(): FunctionComponentElement<any> {
+    const nextContext = this.props.deliverContext.clone();
+    nextContext.style.display = "flex";
+    nextContext.style.minWidth = cssWidth(this.props.data.attributes.width);
+    nextContext.style.minHeight = cssHeight(this.props.data.attributes.height);
+    nextContext.style.maxWidth = cssWidth(this.props.data.attributes.width);
+    nextContext.style.maxHeight = cssHeight(this.props.data.attributes.height);
+    return this.props.deliverContext.singleChildElement(this, nextContext);
   }
 }

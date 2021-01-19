@@ -1,69 +1,75 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { MPComponentsProps } from "../component";
-import { DivContextConsumer } from "./div_context";
+import { DeliverContext } from "../deliver_context";
 
-export class Align extends Component<{ data: MPComponentsProps }> {
+export class Align extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
   alignStyles() {
     let alignments = this.props.data.attributes.alignment;
-    let justifyContent;
+    let marginLeft = "unset";
+    let marginRight = "unset";
+    let marginTop = "unset";
+    let marginBottom = "unset";
     if (
       alignments === "bottomLeft" ||
       alignments === "centerLeft" ||
       alignments === "topLeft"
     ) {
-      justifyContent = "flex-start";
+      marginRight = "auto";
     } else if (
       alignments === "bottomCenter" ||
       alignments === "center" ||
       alignments === "topCenter"
     ) {
-      justifyContent = "center";
+      marginLeft = "auto";
+      marginRight = "auto";
     } else if (
       alignments === "bottomRight" ||
       alignments === "centerRight" ||
       alignments === "topRight"
     ) {
-      justifyContent = "flex-end";
+      marginLeft = "auto";
     }
-    let alignItems;
     if (
       alignments === "topCenter" ||
       alignments === "topLeft" ||
       alignments === "topRight"
     ) {
-      alignItems = "flex-start";
+      marginBottom = "auto";
     } else if (
       alignments === "centerLeft" ||
       alignments === "center" ||
       alignments === "centerRight"
     ) {
-      alignItems = "center";
+      marginTop = "auto";
+      marginBottom = "auto";
     } else if (
       alignments === "bottomCenter" ||
       alignments === "bottomLeft" ||
       alignments === "bottomRight"
     ) {
-      alignItems = "flex-end";
+      marginTop = "auto";
     }
 
-    if (this.props.data.children?.[0]?.name === "flex") {
-      alignItems = "stretch";
-    }
-    return { display: "flex", justifyContent, alignItems };
+    return {
+      display: "flex",
+      marginLeft,
+      marginRight,
+      marginTop,
+      marginBottom,
+    };
   }
 
-  render() {
-    return (
-      <DivContextConsumer
-        style={{
-          minWidth: "100%",
-          minHeight: "100%",
-          ...this.alignStyles()
-        }}
-      >
-        {this.props.children}
-      </DivContextConsumer>
+  render(): FunctionComponentElement<any> {
+    const nextContext = new DeliverContext();
+    nextContext.style = { ...nextContext.style, ...this.alignStyles() };
+    return this.props.deliverContext.singleChildElement(
+      this,
+      this.props.deliverContext,
+      true,
+      nextContext
     );
   }
 }

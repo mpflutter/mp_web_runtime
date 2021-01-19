@@ -58,6 +58,34 @@ export const cssPadding = (value: string) => {
     }
 };
 
+export const cssMargin = (value: string) => {
+    if (!value) return {};
+    if (value.startsWith("EdgeInsets.zero")) {
+        return {};
+    } else if (value.startsWith("EdgeInsets.all(")) {
+        const trimedValue = value
+            .replace("EdgeInsets.all(", "")
+            .replace(")", "");
+        return {
+            marginLeft: trimedValue + "px",
+            marginTop: trimedValue + "px",
+            marginRight: trimedValue + "px",
+            marginBottom: trimedValue + "px"
+        };
+    } else if (value.startsWith("EdgeInsets(")) {
+        const trimedValue = value.replace("EdgeInsets(", "").replace(")", "");
+        const values = trimedValue.split(",").map(it => it.trim());
+        return {
+            marginLeft: values[0] + "px",
+            marginTop: values[1] + "px",
+            marginRight: values[2] + "px",
+            marginBottom: values[3] + "px"
+        };
+    } else {
+        return {};
+    }
+};
+
 export const cssBorderRadius = (value: string) => {
     if (value.startsWith("BorderRadius.circular(")) {
         const trimedValue = value

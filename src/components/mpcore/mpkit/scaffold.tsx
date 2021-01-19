@@ -1,10 +1,14 @@
 import { Component } from "react";
 import { MPComponentsProps } from "../component";
+import { DeliverContext } from "../deliver_context";
 import { MPCore } from "../mpcore";
 import { cssColor } from "../utils/color";
 import { cssWidth } from "../utils/geometry";
 
-export class MPScaffold extends Component<{ data: MPComponentsProps }> {
+export class MPScaffold extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
   componentDidMount() {
     this.setupDocumentTitle();
   }
@@ -27,6 +31,8 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
       <div
         id="mp_scaffold"
         style={{
+          display: "flex",
+          flexDirection: "column",
           paddingTop: appBarHeight + "px",
           height:
             this.props.data.attributes.isListBody === true
@@ -49,11 +55,17 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
               zIndex: 2,
             }}
           >
-            {MPCore.render(this.props.data.attributes.appBar)}
+            {MPCore.render(
+              this.props.data.attributes.appBar,
+              this.props.deliverContext
+            )}
           </div>
         ) : null}
         {this.props.data.attributes.header
-          ? MPCore.render(this.props.data.attributes.header)
+          ? MPCore.render(
+              this.props.data.attributes.header,
+              this.props.deliverContext
+            )
           : null}
         {this.props.data.attributes.tabBar ? (
           <div
@@ -66,10 +78,16 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
               zIndex: 1,
             }}
           >
-            {MPCore.render(this.props.data.attributes.tabBar)}
+            {MPCore.render(
+              this.props.data.attributes.tabBar,
+              this.props.deliverContext
+            )}
           </div>
         ) : null}
-        {MPCore.render(this.props.data.attributes.body)}
+        {MPCore.render(
+          this.props.data.attributes.body,
+          this.props.deliverContext
+        )}
         {this.props.data.attributes?.bottomBar ? (
           <div
             style={{
@@ -78,11 +96,17 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
               zIndex: 2,
             }}
           >
-            {MPCore.render(this.props.data.attributes.bottomBar)}
+            {MPCore.render(
+              this.props.data.attributes.bottomBar,
+              this.props.deliverContext
+            )}
           </div>
         ) : null}
         {this.props.data.attributes?.floatingBody ? (
-          <FloatingBody data={this.props.data.attributes?.floatingBody} />
+          <FloatingBody
+            data={this.props.data.attributes?.floatingBody}
+            deliverContext={this.props.deliverContext}
+          />
         ) : null}
       </div>
     );
@@ -91,6 +115,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
 
 export class FloatingBody extends Component<{
   data: MPComponentsProps;
+  deliverContext: DeliverContext;
 }> {
   render() {
     let positioned = this.props.data;
@@ -110,7 +135,9 @@ export class FloatingBody extends Component<{
           backgroundColor: cssColor(this.props.data.attributes.backgroundColor),
         }}
       >
-        {this.props.data.children?.map((it) => MPCore.render(it))}
+        {this.props.data.children?.map((it) =>
+          MPCore.render(it, this.props.deliverContext)
+        )}
       </div>
     );
   }

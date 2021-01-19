@@ -1,20 +1,18 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { MPComponentsProps } from "../component";
-import { DivContextConsumer } from "./div_context";
+import { DeliverContext } from "../deliver_context";
 
 export class AbsorbPointer extends Component<{
   data: MPComponentsProps;
+  deliverContext: DeliverContext;
 }> {
-  render() {
-    return (
-      <DivContextConsumer
-        onClick={(e: any) => {
+  render(): FunctionComponentElement<any> {
+    const nextContext = this.props.deliverContext.clone();
+    nextContext.onClick = this.props.data.attributes.onTap
+      ? (e: any) => {
           e.stopPropagation();
-        }}
-      >
-        {this.props.children}
-      </DivContextConsumer>
-    );
+        }
+      : undefined;
+    return this.props.deliverContext.singleChildElement(this, nextContext);
   }
 }

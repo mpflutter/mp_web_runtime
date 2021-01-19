@@ -1,28 +1,49 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { MPComponentsProps } from "../component";
-import { cssPadding } from "../utils/geometry";
+import { cssMargin } from "../utils/geometry";
+import { DeliverContext } from "../deliver_context";
 
-export class Padding extends Component<{ data: MPComponentsProps }> {
-  render() {
-    if (this.props.data.attributes.isFull) {
-      return (
-        <div
-          style={{
-            ...cssPadding(this.props.data.attributes.padding),
-            minWidth: "100%",
-            minHeight: "100%",
-          }}
-        >
-          {this.props.children}
-        </div>
-      );
-    } else {
-      return (
-        <div style={{ ...cssPadding(this.props.data.attributes.padding) }}>
-          {this.props.children}
-        </div>
-      );
-    }
+export class Padding extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
+  render(): FunctionComponentElement<any> {
+    const nextContext = new DeliverContext();
+    nextContext.style = {
+      ...nextContext.style,
+      ...cssMargin(this.props.data.attributes.padding),
+    };
+    return this.props.deliverContext.singleChildElement(
+      this,
+      this.props.deliverContext,
+      true,
+      nextContext
+    );
+
+    // if (this.props.data.attributes.isFull) {
+    //   const nextContext = new DeliverContext();
+    //   nextContext.style = {
+    //     ...nextContext.style,
+    //     ...cssMargin(this.props.data.attributes.padding),
+    //   };
+    //   return this.props.deliverContext.singleChildElement(
+    //     this,
+    //     this.props.deliverContext,
+    //     true,
+    //     nextContext
+    //   );
+    // } else {
+    //   const nextContext = new DeliverContext();
+    //   nextContext.style = {
+    //     ...nextContext.style,
+    //     ...cssPadding(this.props.data.attributes.padding),
+    //   };
+    //   return this.props.deliverContext.singleChildElement(
+    //     this,
+    //     this.props.deliverContext,
+    //     true,
+    //     nextContext
+    //   );
+    // }
   }
 }

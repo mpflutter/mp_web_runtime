@@ -1,32 +1,28 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
-import { DivContextConsumer } from "./div_context";
+import { DeliverContext } from "../deliver_context";
 
-export class GestureDetector extends Component<{ data: MPComponentsProps }> {
-  render() {
-    return (
-      <DivContextConsumer
-        onClick={
-          this.props.data.attributes.onTap
-            ? (e: any) => {
-                App.callbackChannel(
-                  JSON.stringify({
-                    type: "gesture_detector",
-                    message: {
-                      event: "onTap",
-                      target: this.props.data.attributes.onTap,
-                    },
-                  })
-                );
-                e.stopPropagation();
-              }
-            : null
+export class GestureDetector extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
+  render(): FunctionComponentElement<any> {
+    const nextContext = this.props.deliverContext.clone();
+    nextContext.onClick = this.props.data.attributes.onTap
+      ? (e: any) => {
+          App.callbackChannel(
+            JSON.stringify({
+              type: "gesture_detector",
+              message: {
+                event: "onTap",
+                target: this.props.data.attributes.onTap,
+              },
+            })
+          );
+          e.stopPropagation();
         }
-      >
-        {this.props.children}
-      </DivContextConsumer>
-    );
+      : undefined;
+    return this.props.deliverContext.singleChildElement(this, nextContext);
   }
 }

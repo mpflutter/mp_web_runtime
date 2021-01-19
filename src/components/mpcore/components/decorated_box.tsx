@@ -1,12 +1,15 @@
-import { Component } from "react";
-import React from "react";
+import { Component, FunctionComponentElement } from "react";
 import { MPComponentsProps } from "../component";
 import { cssBorder } from "../utils/border";
 import { cssColor, cssGradient } from "../utils/color";
 import { cssBorderRadius, cssOffset } from "../utils/geometry";
 import { flutterBase } from "../../app";
+import { DeliverContext } from "../deliver_context";
 
-export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
+export class DecoratedBox extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
   renderDecoration() {
     let output: any = {};
     if (this.props.data.attributes.color) {
@@ -61,7 +64,7 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
     return output;
   }
 
-  render() {
+  render(): FunctionComponentElement<any> {
     if (
       this.props.data.attributes.position === "DecorationPosition.foreground"
     ) {
@@ -81,17 +84,9 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
         </div>
       );
     } else {
-      return (
-        <div
-          style={{
-            minWidth: "-webkit-fill-available",
-            minHeight: "100%",
-            ...this.renderDecoration(),
-          }}
-        >
-          {this.props.children}
-        </div>
-      );
+      const nextContext = this.props.deliverContext.clone();
+      nextContext.style = { ...nextContext.style, ...this.renderDecoration() };
+      return this.props.deliverContext.singleChildElement(this, nextContext);
     }
   }
 }

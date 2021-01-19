@@ -1,12 +1,14 @@
 import { Component } from "react";
-import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 import { cssTextAlign, cssTextStyle } from "../utils/text";
-import { DivContextConsumer } from "./div_context";
 import { MPCore } from "../mpcore";
+import { DeliverContext } from "../deliver_context";
 
-export class RichText extends Component<{ data: MPComponentsProps }> {
+export class RichText extends Component<{
+  data: MPComponentsProps;
+  deliverContext: DeliverContext;
+}> {
   render() {
     let style = {};
     if (this.props.data.attributes.maxLines) {
@@ -52,12 +54,14 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
         },
       };
     }
+    const nextContext = this.props.deliverContext.clone();
+    nextContext.style = { ...nextContext.style, ...style };
     return (
-      <DivContextConsumer style={style}>
+      <div style={nextContext.style}>
         {this.props.data.children?.map((it, idx) => {
           return jsxComponentFromSpan(it, idx);
         })}
-      </DivContextConsumer>
+      </div>
     );
   }
 }
@@ -108,7 +112,7 @@ export class WidgetSpan extends Component<any> {
     return (
       <div style={{ display: "inline-flex" }}>
         {this.props.data.children.map((it: any, idx: number) =>
-          MPCore.render(it, `ws_child_${idx}`)
+          MPCore.render(it, new DeliverContext(), `ws_child_${idx}`)
         )}
       </div>
     );
