@@ -6,7 +6,9 @@ import { cssConstraints, cssHeight, cssWidth } from "../utils/geometry";
 
 export class Image extends Component<{ data: MPComponentsProps }> {
   render() {
-    let imgConstraints: any = {};
+    let imgConstraints: any = cssConstraints(this.props.data.constraints);
+    imgConstraints.minWidth = imgConstraints.maxWidth;
+    imgConstraints.minHeight = imgConstraints.maxHeight;
     if (this.props.data.attributes.width) {
       imgConstraints.minWidth = cssWidth(this.props.data.attributes.width);
       imgConstraints.maxWidth = cssWidth(this.props.data.attributes.width);
@@ -19,7 +21,6 @@ export class Image extends Component<{ data: MPComponentsProps }> {
       <img
         alt=""
         style={{
-          ...cssConstraints(this.props.data.constraints),
           ...imgConstraints,
           objectFit: (() => {
             if (!this.props.data.attributes.fit) return "cover";

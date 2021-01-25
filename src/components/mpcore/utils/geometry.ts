@@ -12,9 +12,9 @@ export const cssConstraints = (value?: MPConstraints): any => {
   if (!value) return {};
   return {
     display: "flex",
-    minWidth: !value.hasTightWidth ? "100%" : cssWidth(value.minWidth),
+    minWidth: cssWidth(value.minWidth),// !value.hasTightWidth ? "unset" : cssWidth(value.minWidth),
     maxWidth: cssWidth(value.maxWidth),
-    minHeight: !value.hasTightHeight ? "100%" : cssHeight(value.minHeight),
+    minHeight: cssHeight(value.minHeight), // !value.hasTightHeight ? "unset" : cssHeight(value.minHeight),
     maxHeight: cssHeight(value.maxHeight),
   };
 };

@@ -5,10 +5,12 @@ import { cssConstraints, cssPadding } from "../utils/geometry";
 export class ListView extends Component<{ data: MPComponentsProps }> {
   render() {
     let constraints = cssConstraints(this.props.data.constraints);
-    if (this.props.data.attributes.scrollDirection === "Axis.horizontal") {
-      constraints.maxWidth = "unset";
-    } else {
-      constraints.maxHeight = "unset";
+    if (this.props.data.attributes.isRoot) {
+      if (this.props.data.attributes.scrollDirection === "Axis.horizontal") {
+        constraints.maxWidth = "unset";
+      } else {
+        constraints.maxHeight = "unset";
+      }
     }
     return (
       <div
@@ -22,6 +24,18 @@ export class ListView extends Component<{ data: MPComponentsProps }> {
           alignItems: "stretch",
           ...cssPadding(this.props.data.attributes.padding),
           ...constraints,
+          overflowX:
+            this.props.data.attributes.scrollDirection === "Axis.horizontal"
+              ? this.props.data.attributes.isRoot
+                ? "unset"
+                : "scroll"
+              : "hidden",
+          overflowY:
+            this.props.data.attributes.scrollDirection !== "Axis.horizontal"
+              ? this.props.data.attributes.isRoot
+                ? "unset"
+                : "scroll"
+              : "hidden",
         }}
       >
         {this.props.children}

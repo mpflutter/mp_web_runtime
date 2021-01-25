@@ -6,7 +6,10 @@ import { MPComponentsProps } from "../component";
 export class CustomScrollView extends Component<{ data: MPComponentsProps }> {
   render() {
     let constraints = cssConstraints(this.props.data.constraints);
-    constraints.maxHeight = "unset";
+    if (this.props.data.attributes.isRoot) {
+      constraints.maxHeight = "unset";
+    }
+
     return (
       <div
         style={{
@@ -14,6 +17,7 @@ export class CustomScrollView extends Component<{ data: MPComponentsProps }> {
           flexDirection: "column",
           justifyContent: "flex-start",
           alignItems: "stretch",
+          overflowX: "hidden",
           ...constraints,
         }}
       >
