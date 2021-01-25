@@ -2,12 +2,12 @@ import { Component } from "react";
 import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
-import { DivContextConsumer } from "./div_context";
 
 export class GestureDetector extends Component<{ data: MPComponentsProps }> {
   render() {
     return (
-      <DivContextConsumer
+      <div
+        style={{}}
         onClick={
           this.props.data.attributes.onTap
             ? (e: any) => {
@@ -22,11 +22,11 @@ export class GestureDetector extends Component<{ data: MPComponentsProps }> {
                 );
                 e.stopPropagation();
               }
-            : null
+            : undefined
         }
       >
         {this.props.children}
-      </DivContextConsumer>
+      </div>
     );
   }
 }

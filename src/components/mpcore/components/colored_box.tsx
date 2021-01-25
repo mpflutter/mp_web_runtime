@@ -2,20 +2,19 @@ import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
-import { DivContextProvider } from "./div_context";
+import { cssConstraints } from "../utils/geometry";
 
 export class ColoredBox extends Component<{ data: MPComponentsProps }> {
   render() {
     return (
-      <DivContextProvider
+      <div
         style={{
-          minWidth: "-webkit-fill-available",
-          minHeight: "100%",
+          ...cssConstraints(this.props.data.constraints),
           backgroundColor: cssColor(this.props.data.attributes.color),
         }}
       >
         {this.props.children}
-      </DivContextProvider>
+      </div>
     );
   }
 }

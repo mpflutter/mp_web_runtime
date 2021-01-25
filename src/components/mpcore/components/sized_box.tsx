@@ -2,12 +2,11 @@ import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssWidth, cssHeight } from "../utils/geometry";
-import { DivContextConsumer } from "./div_context";
 
 export class SizedBox extends Component<{ data: MPComponentsProps }> {
   render() {
     return (
-      <DivContextConsumer
+      <div
         style={{
           display: "flex",
           minWidth: cssWidth(this.props.data.attributes.width),
@@ -17,7 +16,7 @@ export class SizedBox extends Component<{ data: MPComponentsProps }> {
         }}
       >
         {this.props.children}
-      </DivContextConsumer>
+      </div>
     );
   }
 }

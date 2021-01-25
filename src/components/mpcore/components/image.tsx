@@ -2,27 +2,25 @@ import { Component } from "react";
 import React from "react";
 import { flutterBase } from "../../app";
 import { MPComponentsProps } from "../component";
-import { DivContextConsumer } from "./div_context";
+import { cssConstraints, cssHeight, cssWidth } from "../utils/geometry";
 
 export class Image extends Component<{ data: MPComponentsProps }> {
   render() {
+    let imgConstraints: any = {};
+    if (this.props.data.attributes.width) {
+      imgConstraints.minWidth = cssWidth(this.props.data.attributes.width);
+      imgConstraints.maxWidth = cssWidth(this.props.data.attributes.width);
+    }
+    if (this.props.data.attributes.height) {
+      imgConstraints.minHeight = cssHeight(this.props.data.attributes.height);
+      imgConstraints.maxHeight = cssHeight(this.props.data.attributes.height);
+    }
     return (
-      <DivContextConsumer
-        el="img"
+      <img
+        alt=""
         style={{
-          display: "flex",
-          minWidth: this.props.data.attributes.width
-            ? `${this.props.data.attributes.width}px`
-            : "100%",
-          maxWidth: this.props.data.attributes.width
-            ? `${this.props.data.attributes.width}px`
-            : "100%",
-          minHeight: this.props.data.attributes.height
-            ? `${this.props.data.attributes.height}px`
-            : "100%",
-          maxHeight: this.props.data.attributes.height
-            ? `${this.props.data.attributes.height}px`
-            : "100%",
+          ...cssConstraints(this.props.data.constraints),
+          ...imgConstraints,
           objectFit: (() => {
             if (!this.props.data.attributes.fit) return "cover";
             switch (this.props.data.attributes.fit) {
@@ -54,7 +52,7 @@ export class Image extends Component<{ data: MPComponentsProps }> {
             }
           }
         })()}
-      ></DivContextConsumer>
+      ></img>
     );
   }
 }

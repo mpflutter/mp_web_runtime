@@ -2,10 +2,6 @@ import { Component } from "react";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {
-  DivContextProvider,
-  DivContextConsumer,
-} from "./mpcore/components/div_context";
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
 import { applyPatch } from "fast-json-patch";
@@ -149,7 +145,7 @@ export class App extends Component<any, any> {
 
   render() {
     return (
-      <span>
+      <div style={{ display: "contents" }}>
         {MPCore.render(this.state.data?.scaffold)}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
@@ -161,7 +157,7 @@ export class App extends Component<any, any> {
           displayingDialog={this.state.isDialogDisplaying}
           scaffold={this.state.data?.scaffold}
         />
-      </span>
+      </div>
     );
   }
 
@@ -239,8 +235,6 @@ class Router {
 if (typeof window !== "undefined") {
   (window as any).$MPFlutter = {
     MPCore,
-    DivContextProvider,
-    DivContextConsumer,
     App,
   };
   (window as any).React = React;

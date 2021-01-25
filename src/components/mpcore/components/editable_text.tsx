@@ -1,9 +1,9 @@
 import { Component } from "react";
-import { DivContextConsumer } from "./div_context";
 import { cssTextAlign, cssTextStyle } from "../utils/text";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 import React from "react";
+import { cssConstraints } from "../utils/geometry";
 
 export class EditableText extends Component<{ data: MPComponentsProps }> {
   _lastValue: any;
@@ -64,7 +64,7 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
   render() {
     if (this.props.data.attributes.maxLines > 1) {
       return (
-        <DivContextConsumer>
+        <div style={{ ...cssConstraints(this.props.data.constraints) }}>
           <textarea
             style={{
               ...cssTextStyle(this.props.data.attributes.style),
@@ -93,11 +93,11 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
           >
             {this.props.data.attributes.value || this._lastValue}
           </textarea>
-        </DivContextConsumer>
+        </div>
       );
     }
     return (
-      <DivContextConsumer>
+      <div style={{ ...cssConstraints(this.props.data.constraints) }}>
         <input
           style={{
             ...cssTextStyle(this.props.data.attributes.style),
@@ -142,7 +142,7 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
           autoFocus={this.props.data.attributes.autofocus}
           autoCorrect={this.props.data.attributes.autoCorrect}
         ></input>
-      </DivContextConsumer>
+      </div>
     );
   }
 }

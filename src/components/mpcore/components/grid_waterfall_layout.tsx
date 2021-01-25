@@ -1,5 +1,4 @@
 import { cssPadding } from "../utils/geometry";
-import { DivContextProvider } from "./div_context";
 
 export interface SliverGridDelegateWithFixedCrossAxisCount {
   mainAxisSpacing: number;
@@ -66,11 +65,9 @@ export const renderSliverGridDelegateWithFixedCrossAxisCount = (
           marginBottom,
         }}
       >
-        <DivContextProvider
-          style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
-        >
+        <div style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}>
           {it}
-        </DivContextProvider>
+        </div>
       </div>
     );
   });
@@ -143,11 +140,9 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
           marginBottom,
         }}
       >
-        <DivContextProvider
-          style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
-        >
+        <div style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}>
           {it}
-        </DivContextProvider>
+        </div>
       </div>
     );
   });
@@ -254,11 +249,11 @@ export const renderSliverWaterfallDelegate = (
               height: layouts[idx].height + paddingBottom + "px",
             }}
           >
-            <DivContextProvider
+            <div
               style={{ display: "flex", minWidth: "100%", minHeight: "100%" }}
             >
               {it}
-            </DivContextProvider>
+            </div>
           </div>
         );
       })}

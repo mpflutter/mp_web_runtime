@@ -2,12 +2,11 @@ import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssWidth } from "../utils/geometry";
-import { DivContextConsumer } from "./div_context";
 
 export class Positioned extends Component<{ data: MPComponentsProps }> {
   render() {
     return (
-      <DivContextConsumer
+      <div
         style={{
           display: "flex",
           position: "absolute",
@@ -20,7 +19,7 @@ export class Positioned extends Component<{ data: MPComponentsProps }> {
         }}
       >
         {this.props.children}
-      </DivContextConsumer>
+      </div>
     );
   }
 }

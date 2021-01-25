@@ -1,20 +1,19 @@
 import { Component } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
-import { DivContextProvider } from "./div_context";
 
 export class IgnorePointer extends Component<{ data: MPComponentsProps }> {
   render() {
     return (
-      <DivContextProvider
+      <div
         style={{
           pointerEvents: this.props.data.attributes.ignoring
             ? "none"
-            : undefined
+            : undefined,
         }}
       >
         {this.props.children}
-      </DivContextProvider>
+      </div>
     );
   }
 }

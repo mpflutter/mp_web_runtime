@@ -3,14 +3,22 @@ import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 import { cssTextAlign, cssTextStyle } from "../utils/text";
-import { DivContextConsumer } from "./div_context";
 import { MPCore } from "../mpcore";
+import { cssConstraints } from "../utils/geometry";
 
 export class RichText extends Component<{ data: MPComponentsProps }> {
   render() {
     let style = {};
+    let constraints = cssConstraints(this.props.data.constraints);
+    if (constraints.minWidth === "100%") {
+      constraints.minWidth = "unset";
+    }
+    if (constraints.minHeight === "100%") {
+      constraints.minHeight = "unset";
+    }
     if (this.props.data.attributes.maxLines) {
       style = {
+        ...constraints,
         ...style,
         ...{
           overflow: "hidden",
@@ -32,6 +40,7 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
       };
     } else {
       style = {
+        ...constraints,
         ...style,
         ...{
           overflow: "hidden",
@@ -53,11 +62,11 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
       };
     }
     return (
-      <DivContextConsumer style={style}>
+      <div style={style}>
         {this.props.data.children?.map((it, idx) => {
           return jsxComponentFromSpan(it, idx);
         })}
-      </DivContextConsumer>
+      </div>
     );
   }
 }
