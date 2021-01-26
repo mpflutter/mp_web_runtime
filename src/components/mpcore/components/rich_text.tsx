@@ -7,7 +7,6 @@ import { MPCore } from "../mpcore";
 import { cssConstraints } from "../utils/geometry";
 
 export class RichText extends Component<{ data: MPComponentsProps }> {
-
   shouldComponentUpdate(nextProps: { data: MPComponentsProps }) {
     if (nextProps.data.attributes.measureId) {
       return false;
@@ -22,6 +21,10 @@ export class RichText extends Component<{ data: MPComponentsProps }> {
       constraints.minWidth = "unset";
     }
     if (constraints.minHeight === "100%") {
+      constraints.minHeight = "unset";
+    }
+    if (this.props.data.constraints?.measuring) {
+      constraints.minWidth = "unset";
       constraints.minHeight = "unset";
     }
     if (this.props.data.attributes.maxLines) {

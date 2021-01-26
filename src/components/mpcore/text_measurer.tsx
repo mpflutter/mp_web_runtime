@@ -82,6 +82,9 @@ export class TextMeasurer extends React.Component<
         }}
       >
         {this.state.targetTexts.map((it) => {
+          if (it.constraints) {
+            it.constraints.measuring = true;
+          }
           return (
             <div
               key={`text_measurer_${it.attributes.measureId}`}

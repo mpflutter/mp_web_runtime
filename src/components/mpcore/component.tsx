@@ -12,4 +12,5 @@ export interface MPConstraints {
   maxHeight: string;
   hasTightWidth: boolean;
   hasTightHeight: boolean;
+  measuring: boolean;
 }
