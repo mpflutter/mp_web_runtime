@@ -12,7 +12,7 @@ export const cssConstraints = (value?: MPConstraints): any => {
   if (!value) return {};
   return {
     display: "flex",
-    minWidth: cssWidth(value.minWidth),// !value.hasTightWidth ? "unset" : cssWidth(value.minWidth),
+    minWidth: cssWidth(value.minWidth), // !value.hasTightWidth ? "unset" : cssWidth(value.minWidth),
     maxWidth: cssWidth(value.maxWidth),
     minHeight: cssHeight(value.minHeight), // !value.hasTightHeight ? "unset" : cssHeight(value.minHeight),
     maxHeight: cssHeight(value.maxHeight),
@@ -26,6 +26,8 @@ export const cssWidth = (value: string, isTight = true) => {
   }
   if (value === "Infinity") {
     return "100%";
+  } else if (value === "0.001") {
+    return "100%";
   } else {
     return value + "px";
   }
@@ -37,6 +39,8 @@ export const cssHeight = (value: string, isTight = true) => {
     return "-webkit-fill-available";
   }
   if (value === "Infinity") {
+    return "100%";
+  } else if (value === "0.001") {
     return "100%";
   } else {
     return value + "px";

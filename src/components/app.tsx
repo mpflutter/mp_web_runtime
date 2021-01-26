@@ -8,6 +8,7 @@ import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
 import { ScrollBehavior } from "./mpcore/scroll_behavior";
+import { TextMeasurer } from "./mpcore/text_measurer";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -72,7 +73,9 @@ export class App extends Component<any, any> {
     };
     Router.setupPopStateListener();
     App.callbackChannel = (message) => {
-      socket.send(message);
+      try {
+        socket.send(message);
+      } catch (error) {}
     };
   }
 
@@ -157,6 +160,7 @@ export class App extends Component<any, any> {
           displayingDialog={this.state.isDialogDisplaying}
           scaffold={this.state.data?.scaffold}
         />
+        <TextMeasurer scaffold={this.state.data?.scaffold} />
       </div>
     );
   }

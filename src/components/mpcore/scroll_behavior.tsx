@@ -24,6 +24,6 @@ export class ScrollBehavior extends React.Component<{
   }
 
   render() {
-    return <span></span>;
+    return <div></div>;
   }
 }
