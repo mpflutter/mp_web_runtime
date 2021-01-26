@@ -73,12 +73,7 @@ export class TextMeasurer extends React.Component<
     return (
       <div
         style={{
-          position: "absolute",
-          top: "0px",
-          left: "0px",
-          opacity: 0,
-          zIndex: -9999,
-          pointerEvents: "none",
+          display: "contents",
         }}
       >
         {this.state.targetTexts.map((it) => {
@@ -89,6 +84,14 @@ export class TextMeasurer extends React.Component<
             <div
               key={`text_measurer_${it.attributes.measureId}`}
               id={`text_measurer_${it.attributes.measureId}`}
+              style={{
+                position: "absolute",
+                left: "0px",
+                top: "0px",
+                opacity: 0,
+                zIndex: -9999,
+                pointerEvents: "none",
+              }}
             >
               {MPCore.render(it)}
             </div>
