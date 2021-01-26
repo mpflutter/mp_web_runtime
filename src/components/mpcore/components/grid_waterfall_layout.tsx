@@ -102,7 +102,7 @@ export const renderSliverGridDelegateWithMaxCrossAxisExtent = (
     ? parseInt(gridViewPadding.paddingBottom)
     : 0;
 
-  const crossAxisCount = Math.ceil(
+  const crossAxisCount = Math.floor(
     (clientWidth - paddingLeft - paddingRight) / delegate.maxCrossAxisExtent
   );
 
