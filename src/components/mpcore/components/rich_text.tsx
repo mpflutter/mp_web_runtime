@@ -7,6 +7,14 @@ import { MPCore } from "../mpcore";
 import { cssConstraints } from "../utils/geometry";
 
 export class RichText extends Component<{ data: MPComponentsProps }> {
+
+  shouldComponentUpdate(nextProps: { data: MPComponentsProps }) {
+    if (nextProps.data.attributes.measureId) {
+      return false;
+    }
+    return true;
+  }
+
   render() {
     let style = {};
     let constraints = cssConstraints(this.props.data.constraints);
