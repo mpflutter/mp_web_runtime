@@ -5,8 +5,6 @@ import { MPComponentsProps } from "../component";
 
 export class CustomScrollView extends Component<{ data: MPComponentsProps }> {
   render() {
-    console.log(this.props.data);
-    
     let constraints = cssConstraints(this.props.data.constraints);
     if (this.props.data.attributes.isRoot) {
       constraints.maxHeight = "unset";
