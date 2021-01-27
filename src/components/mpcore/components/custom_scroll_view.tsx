@@ -19,7 +19,6 @@ export class CustomScrollView extends Component<{ data: MPComponentsProps }> {
           flexDirection: "column",
           justifyContent: "flex-start",
           alignItems: "stretch",
-          overflowX: "hidden",
           ...constraints,
         }}
       >

@@ -37,6 +37,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
             : "unset",
           overflow:
             this.props.data.attributes.isListBody === true ? "unset" : "hidden",
+          overflowX: "hidden",
         }}
       >
         {this.props.data.attributes.appBar ? (
