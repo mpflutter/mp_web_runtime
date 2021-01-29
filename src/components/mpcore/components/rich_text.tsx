@@ -114,10 +114,10 @@ export class TextSpan extends Component<any> {
           }
         })()}
       >
-        {this.props.data.attributes.text ??
-          this.props.data.children?.map((it: any, idx: number) => {
-            return jsxComponentFromSpan(it, idx);
-          })}
+        {this.props.data.attributes.text}
+        {this.props.data.children?.map((it: any, idx: number) => {
+          return jsxComponentFromSpan(it, idx);
+        })}
       </span>
     );
   }
