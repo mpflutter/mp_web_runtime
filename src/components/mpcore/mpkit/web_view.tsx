@@ -1,5 +1,6 @@
 import { Component } from "react";
 import { MPComponentsProps } from "../component";
+import { cssConstraints } from "../utils/geometry";
 
 export class MPWebView extends Component<{ data: MPComponentsProps }> {
   render() {
@@ -7,7 +8,10 @@ export class MPWebView extends Component<{ data: MPComponentsProps }> {
       <iframe
         title="mp_web_view"
         src={this.props.data.attributes.url}
-        style={{ width: "100%", height: "100%", border: "none" }}
+        style={{
+          border: "none",
+          ...cssConstraints(this.props.data.constraints),
+        }}
       ></iframe>
     );
   }
