@@ -61,6 +61,10 @@ export class TextMeasurer extends React.Component<
   doScan(props: { scaffold: MPComponentsProps }) {
     let result: MPComponentsProps[] = [];
     TextMeasurer.scanRichText(props.scaffold?.attributes?.body, result);
+    TextMeasurer.scanRichText(props.scaffold?.attributes?.tabBar, result);
+    TextMeasurer.scanRichText(props.scaffold?.attributes?.header, result);
+    TextMeasurer.scanRichText(props.scaffold?.attributes?.appBar, result);
+    TextMeasurer.scanRichText(props.scaffold?.attributes?.bottomBar, result);
     this.setState({
       targetTexts: result,
     });
