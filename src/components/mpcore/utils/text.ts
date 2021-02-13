@@ -53,7 +53,7 @@ export function cssTextStyle(data: any): CSSProperties {
       style.alignmentBaseline = getBaselineStyle(data);
     }
     if (data.height) {
-      style.height = data.height;
+      style.lineHeight = data.height;
     }
     if (data.backgroundColor != null) {
       style.backgroundColor = cssColor(data.backgroundColor);
