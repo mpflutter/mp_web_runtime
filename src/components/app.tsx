@@ -152,7 +152,12 @@ export class App extends Component<any, any> {
         {this.state.data?.mainTabBar ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             {MPCore.render(this.state.data?.scaffold)}
-            {MPCore.render(this.state.data?.mainTabBar)}
+            <div style={{ position: "sticky", bottom: "0px", zIndex: 1, opacity: 0.0 }}>
+              {MPCore.render(this.state.data?.mainTabBar)}
+            </div>
+            <div style={{ position: "fixed", bottom: "0px", zIndex: 1 }}>
+              {MPCore.render(this.state.data?.mainTabBar)}
+            </div>
           </div>
         ) : (
           MPCore.render(this.state.data?.scaffold)
