@@ -149,7 +149,14 @@ export class App extends Component<any, any> {
   render() {
     return (
       <div style={{ display: "contents" }}>
-        {MPCore.render(this.state.data?.scaffold)}
+        {this.state.data?.mainTabBar ? (
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            {MPCore.render(this.state.data?.scaffold)}
+            {MPCore.render(this.state.data?.mainTabBar)}
+          </div>
+        ) : (
+          MPCore.render(this.state.data?.scaffold)
+        )}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
               <Overlay key={`overlay_${this.props.index}`} data={it} />
