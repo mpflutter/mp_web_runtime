@@ -64,56 +64,15 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
   render() {
     if (this.props.data.attributes.maxLines > 1) {
       return (
-        <div style={{ ...cssConstraints(this.props.data.constraints) }}>
-          <textarea
-            style={{
-              ...cssTextStyle(this.props.data.attributes.style),
-              textAlign: cssTextAlign(this.props.data.attributes.textAlign),
-              width: "100%",
-              height: "100%",
-              backgroundColor: "transparent",
-              border: "none",
-            }}
-            onInput={(event) => {
-              this._lastValue = (event.target as HTMLInputElement).value;
-              this._onChanged(
-                event.target as HTMLInputElement,
-                (event.target as HTMLInputElement).value
-              );
-            }}
-            onChange={(event) => {
-              this._lastValue = ((event.target as unknown) as HTMLInputElement).value;
-              this._onChanged(
-                (event.target as unknown) as HTMLInputElement,
-                ((event.target as unknown) as HTMLInputElement).value
-              );
-            }}
-            rows={this.props.data.attributes.maxLines}
-            readOnly={this.props.data.attributes.readOnly}
-          >
-            {this.props.data.attributes.value || this._lastValue}
-          </textarea>
-        </div>
-      );
-    }
-    return (
-      <div style={{ ...cssConstraints(this.props.data.constraints) }}>
-        <input
+        <textarea
           style={{
+            ...cssConstraints(this.props.data.constraints),
             ...cssTextStyle(this.props.data.attributes.style),
             textAlign: cssTextAlign(this.props.data.attributes.textAlign),
             width: "100%",
             height: "100%",
             backgroundColor: "transparent",
             border: "none",
-          }}
-          onKeyUp={(event) => {
-            if (event.key === "Enter" || event.keyCode === 13) {
-              this._onSubmitted(
-                event.target as HTMLInputElement,
-                (event.target as HTMLInputElement).value
-              );
-            }
           }}
           onInput={(event) => {
             this._lastValue = (event.target as HTMLInputElement).value;
@@ -123,26 +82,64 @@ export class EditableText extends Component<{ data: MPComponentsProps }> {
             );
           }}
           onChange={(event) => {
-            this._lastValue = (event.target as HTMLInputElement).value;
+            this._lastValue = ((event.target as unknown) as HTMLInputElement).value;
             this._onChanged(
+              (event.target as unknown) as HTMLInputElement,
+              ((event.target as unknown) as HTMLInputElement).value
+            );
+          }}
+          rows={this.props.data.attributes.maxLines}
+          readOnly={this.props.data.attributes.readOnly}
+        >
+          {this.props.data.attributes.value || this._lastValue}
+        </textarea>
+      );
+    }
+    return (
+      <input
+        style={{
+          ...cssConstraints(this.props.data.constraints),
+          ...cssTextStyle(this.props.data.attributes.style),
+          textAlign: cssTextAlign(this.props.data.attributes.textAlign),
+          width: "100%",
+          height: "100%",
+          backgroundColor: "transparent",
+          border: "none",
+        }}
+        onKeyUp={(event) => {
+          if (event.key === "Enter" || event.keyCode === 13) {
+            this._onSubmitted(
               event.target as HTMLInputElement,
               (event.target as HTMLInputElement).value
             );
-          }}
-          readOnly={this.props.data.attributes.readOnly}
-          type={
-            this.props.data.attributes.obscureText
-              ? "password"
-              : this._keyboardType(this.props.data.attributes.keyboardType)
           }
-          pattern={this._keyboardPattern(
-            this.props.data.attributes.keyboardType
-          )}
-          value={this.props.data.attributes.value || this._lastValue}
-          autoFocus={this.props.data.attributes.autofocus}
-          autoCorrect={this.props.data.attributes.autoCorrect}
-        ></input>
-      </div>
+        }}
+        onInput={(event) => {
+          this._lastValue = (event.target as HTMLInputElement).value;
+          this._onChanged(
+            event.target as HTMLInputElement,
+            (event.target as HTMLInputElement).value
+          );
+        }}
+        onChange={(event) => {
+          this._lastValue = (event.target as HTMLInputElement).value;
+          this._onChanged(
+            event.target as HTMLInputElement,
+            (event.target as HTMLInputElement).value
+          );
+        }}
+        readOnly={this.props.data.attributes.readOnly}
+        type={
+          this.props.data.attributes.obscureText
+            ? "password"
+            : this._keyboardType(this.props.data.attributes.keyboardType)
+        }
+        pattern={this._keyboardPattern(this.props.data.attributes.keyboardType)}
+        value={this.props.data.attributes.value || this._lastValue}
+        autoFocus={this.props.data.attributes.autofocus}
+        autoCorrect={this.props.data.attributes.autoCorrect}
+        placeholder={this.props.data.attributes.placeholder}
+      ></input>
     );
   }
 }
