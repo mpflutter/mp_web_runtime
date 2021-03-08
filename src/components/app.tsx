@@ -152,7 +152,14 @@ export class App extends Component<any, any> {
         {this.state.data?.mainTabBar ? (
           <div style={{ display: "flex", flexDirection: "column" }}>
             {MPCore.render(this.state.data?.scaffold)}
-            <div style={{ position: "sticky", bottom: "0px", zIndex: 1, opacity: 0.0 }}>
+            <div
+              style={{
+                position: "sticky",
+                bottom: "0px",
+                zIndex: 1,
+                opacity: 0.0,
+              }}
+            >
               {MPCore.render(this.state.data?.mainTabBar)}
             </div>
             <div style={{ position: "fixed", bottom: "0px", zIndex: 1 }}>
@@ -199,6 +206,11 @@ class Router {
   static setupPopStateListener() {
     if (window) {
       window.addEventListener("popstate", (e) => {
+        if (e.state && e.state.name) {
+          if (document.location.href.indexOf(e.state.name) >= 0) {
+            return true;
+          }
+        }
         if (this.doBacking) {
           return true;
         }
