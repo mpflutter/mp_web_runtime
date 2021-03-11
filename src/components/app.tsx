@@ -203,25 +203,24 @@ export class App extends Component<any, any> {
 }
 
 class Router {
+  private static lastState: any;
+
   static setupPopStateListener() {
     if (window) {
       window.addEventListener("popstate", (e) => {
-        if (e.state && e.state.name) {
-          if (document.location.href.indexOf(e.state.name) >= 0) {
-            return true;
-          }
-        }
         if (this.doBacking) {
           return true;
         }
-        App.callbackChannel(
-          JSON.stringify({
-            type: "router",
-            message: {
-              event: "doPop",
-            },
-          })
-        );
+        if (this.lastState?.randomId !== e.state?.randomId) {
+          App.callbackChannel(
+            JSON.stringify({
+              type: "router",
+              message: {
+                event: "doPop",
+              },
+            })
+          );
+        }
       });
     }
   }
@@ -245,7 +244,9 @@ class Router {
           .join("?");
         routeUrl = `${path}${encodeURIComponent(`?${others}`)}`;
       }
+      message.route.randomId = Math.random().toString();
       window.history.pushState(message.route, "", `?route=${routeUrl}`);
+      this.lastState = message.route;
     }
   }
 
