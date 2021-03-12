@@ -47,9 +47,9 @@ export class Image extends Component<{ data: MPComponentsProps }> {
             return this.props.data.attributes.src;
           } else if (this.props.data.attributes.assetName) {
             if (this.props.data.attributes.assetPkg) {
-              return `${flutterBase}/assets/packages/${this.props.data.attributes.assetPkg}/${this.props.data.attributes.assetName}`;
+              return `${flutterBase}assets/packages/${this.props.data.attributes.assetPkg}/${this.props.data.attributes.assetName}`;
             } else {
-              return `${flutterBase}/assets/${this.props.data.attributes.assetName}`;
+              return `${flutterBase}assets/${this.props.data.attributes.assetName}`;
             }
           }
         })()}

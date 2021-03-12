@@ -18,9 +18,9 @@ export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
           return this.props.data.attributes.image.src;
         } else if (this.props.data.attributes.image.assetName) {
           if (this.props.data.attributes.image.assetPkg) {
-            return `${flutterBase}/assets/packages/${this.props.data.attributes.image.assetPkg}/${this.props.data.attributes.image.assetName}`;
+            return `${flutterBase}assets/packages/${this.props.data.attributes.image.assetPkg}/${this.props.data.attributes.image.assetName}`;
           } else {
-            return `${flutterBase}/assets/${this.props.data.attributes.image.assetName}`;
+            return `${flutterBase}assets/${this.props.data.attributes.image.assetName}`;
           }
         }
       })()}")`;

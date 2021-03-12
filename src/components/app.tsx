@@ -30,7 +30,7 @@ export class App extends Component<any, any> {
   }
 
   setupDartChannel() {
-    flutterBase = `http://${new URL(window.location.href).hostname}:9898`;
+    flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
     const socket = new WebSocket(
       `ws://${new URL(window.location.href).hostname}:9898/`
     );
@@ -121,7 +121,7 @@ export class App extends Component<any, any> {
         style.innerHTML = `
         @font-face{
           font-family: '${font.name}';
-          src: url('${flutterBase}/assets/fonts/${font.url}');
+          src: url('${flutterBase}assets/fonts/${font.url}');
         }
         `;
         document.body.appendChild(style);
@@ -132,7 +132,7 @@ export class App extends Component<any, any> {
   setupPlugins() {
     if (typeof window !== "undefined") {
       const script = document.createElement("script");
-      script.src = `${flutterBase}/assets/mp_plugins.js`;
+      script.src = `${flutterBase}assets/mp_plugins.js`;
       script.addEventListener("load", () => {
         this.setState({});
       });
@@ -140,7 +140,7 @@ export class App extends Component<any, any> {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.type = "text/css";
-      link.href = `${flutterBase}/assets/mp_plugins.css`;
+      link.href = `${flutterBase}assets/mp_plugins.css`;
       link.media = "all";
       document.head.appendChild(link);
     }
