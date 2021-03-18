@@ -256,7 +256,9 @@ class Router {
     if (window) {
       this.doBacking = true;
       window.history.back();
-      this.doBacking = false;
+      setTimeout(() => {
+        this.doBacking = false;
+      }, 300);
     }
   }
 }
