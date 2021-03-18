@@ -179,7 +179,7 @@ export class App extends Component<any, any> {
           displayingDialog={this.state.isDialogDisplaying}
           scaffold={this.state.data?.scaffold}
         />
-        <TextMeasurer scaffold={this.state.data?.scaffold} />
+        <TextMeasurer scaffold={this.state.data?.scaffold} overlays={this.state.data?.overlays} />
       </div>
     );
   }

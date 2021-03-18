@@ -6,6 +6,7 @@ import { MPCore } from "./mpcore";
 export class TextMeasurer extends React.Component<
   {
     scaffold: MPComponentsProps;
+    overlays: MPComponentsProps[];
   },
   { targetTexts: MPComponentsProps[] }
 > {
@@ -58,13 +59,34 @@ export class TextMeasurer extends React.Component<
     );
   }
 
-  doScan(props: { scaffold: MPComponentsProps }) {
+  doScan(props: {
+    scaffold: MPComponentsProps;
+    overlays: MPComponentsProps[];
+  }) {
     let result: MPComponentsProps[] = [];
-    TextMeasurer.scanRichText(props.scaffold?.attributes?.body, result);
-    TextMeasurer.scanRichText(props.scaffold?.attributes?.tabBar, result);
-    TextMeasurer.scanRichText(props.scaffold?.attributes?.header, result);
-    TextMeasurer.scanRichText(props.scaffold?.attributes?.appBar, result);
-    TextMeasurer.scanRichText(props.scaffold?.attributes?.bottomBar, result);
+    let scanner = (scaffold: MPComponentsProps) => {
+      if (scaffold.children) {
+        for (let index = 0; index < scaffold.children.length; index++) {
+          TextMeasurer.scanRichText(scaffold.children[index], result);
+        }
+      }
+      TextMeasurer.scanRichText(scaffold.attributes?.body, result);
+      TextMeasurer.scanRichText(scaffold.attributes?.tabBar, result);
+      TextMeasurer.scanRichText(scaffold.attributes?.header, result);
+      TextMeasurer.scanRichText(scaffold.attributes?.appBar, result);
+      TextMeasurer.scanRichText(scaffold.attributes?.bottomBar, result);
+    };
+    if (props?.scaffold) {
+      scanner(props.scaffold);
+    }
+    if (props?.overlays) {
+      for (let index = 0; index < props?.overlays.length; index++) {
+        const element = props?.overlays[index];
+        if (element?.children?.[0]) {
+          scanner(element);
+        }
+      }
+    }
     this.setState({
       targetTexts: result,
     });
