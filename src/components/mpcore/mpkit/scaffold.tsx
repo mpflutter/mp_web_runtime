@@ -7,10 +7,12 @@ import { cssWidth } from "../utils/geometry";
 export class MPScaffold extends Component<{ data: MPComponentsProps }> {
   componentDidMount() {
     this.setupDocumentTitle();
+    this.setupDocumentMetaData();
   }
 
   componentDidUpdate() {
     this.setupDocumentTitle();
+    this.setupDocumentMetaData();
   }
 
   setupDocumentTitle() {
@@ -18,6 +20,28 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
       document.title = this.props.data.attributes.name;
     } else {
       document.title = "";
+    }
+  }
+
+  setupDocumentMetaData() {
+    for (let index = 0; index < document.head.children.length; index++) {
+      const element = document.head.children[index];
+      if (element.tagName === "META") {
+        const name = element.attributes.getNamedItem("name")?.value;
+        if (!name || name === "viewport" || name === "theme-color") {
+          continue;
+        }
+        document.head.removeChild(element);
+      }
+    }
+    if (this.props.data.attributes?.metaData) { 
+      for (const key in this.props.data.attributes?.metaData) {
+        const value = this.props.data.attributes?.metaData[key];
+        const element = document.createElement("meta");
+        element.name = key;
+        element.content = value;
+        document.head.appendChild(element);
+      }
     }
   }
 
