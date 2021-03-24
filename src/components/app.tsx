@@ -4,22 +4,58 @@ import ReactDOM from "react-dom";
 
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
-import { applyPatch } from "fast-json-patch";
+// import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
 import { ScrollBehavior } from "./mpcore/scroll_behavior";
 import { TextMeasurer } from "./mpcore/text_measurer";
+import { MPComponentsProps, MPDocumentProps } from "./mpcore/component";
 
 export let flutterBase = "./";
 export const flutterFonts = [
   { name: "MaterialIcons", url: "MaterialIcons-Regular.otf" },
 ];
 
-export class App extends Component<any, any> {
+export class App extends Component<
+  any,
+  { isDialogDisplaying: boolean; data: MPDocumentProps }
+> {
   static callbackChannel: (message: string) => void = () => {};
 
   state: any = {};
-  lastFrameData: any;
+
+  lastFrameData?: { data: MPDocumentProps };
+  lastFrameDataHashMap: { [key: number]: MPComponentsProps } = {};
+
+  createHashMap(obj: any) {
+    if (obj && obj.hashCode && typeof obj.hashCode === "number") {
+      this.lastFrameDataHashMap[obj.hashCode] = obj;
+    }
+    if (obj) {
+      for (const key in obj) {
+        if (typeof key === "string") {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            const value = obj[key];
+            if (typeof value === "object") {
+              this.createHashMap(value);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  composeHashMap(data: MPDocumentProps) {
+    if (
+      data.diff &&
+      data.diffIndex &&
+      this.lastFrameDataHashMap[data.diffIndex]
+    ) {
+      Object.assign(this.lastFrameDataHashMap[data.diffIndex], {
+        ...data.diff,
+      });
+    }
+  }
 
   componentDidMount() {
     if ((window as any).mpflutterUseSocket === 1) {
@@ -39,19 +75,39 @@ export class App extends Component<any, any> {
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
           this.lastFrameData = messageData;
-          this.setState({
-            data: messageData.message,
-          });
-        } else if (messageData.type === "frame_diff_data") {
-          const patchedFrameData = applyPatch(
-            this.lastFrameData,
-            messageData.message as any
-          ).newDocument;
-          this.lastFrameData = patchedFrameData;
-          this.setState({
-            data: patchedFrameData.message,
-          });
-        } else if (messageData.type === "route") {
+          this.setState(
+            {
+              data: messageData.message,
+            },
+            () => {
+              this.lastFrameDataHashMap = {};
+              this.createHashMap(this.state.data);
+            }
+          );
+        } else if (messageData.type === "diff_data") {
+          let newFrameData = this.state.data;
+          this.composeHashMap(messageData.message);
+          this.setState(
+            {
+              data: newFrameData,
+            },
+            () => {
+              this.lastFrameDataHashMap = {};
+              this.createHashMap(this.state.data);
+            }
+          );
+        }
+        //  else if (messageData.type === "frame_diff_data") {
+        //   const patchedFrameData = applyPatch(
+        //     this.lastFrameData,
+        //     messageData.message as any
+        //   ).newDocument;
+        //   this.lastFrameData = patchedFrameData;
+        //   this.setState({
+        //     data: patchedFrameData.message,
+        //   });
+        // }
+        else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "action:web_dialogs") {
           WebDialogs.receivedWebDialogsMessage(messageData.message);
@@ -85,19 +141,39 @@ export class App extends Component<any, any> {
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
           this.lastFrameData = messageData;
-          this.setState({
-            data: messageData.message,
-          });
-        } else if (messageData.type === "frame_diff_data") {
-          const patchedFrameData = applyPatch(
-            this.lastFrameData,
-            messageData.message as any
-          ).newDocument;
-          this.lastFrameData = patchedFrameData;
-          this.setState({
-            data: patchedFrameData.message,
-          });
-        } else if (messageData.type === "route") {
+          this.setState(
+            {
+              data: messageData.message,
+            },
+            () => {
+              this.lastFrameDataHashMap = {};
+              this.createHashMap(this.state.data);
+            }
+          );
+        } else if (messageData.type === "diff_data") {
+          let newFrameData = this.state.data;
+          this.composeHashMap(messageData.message);
+          this.setState(
+            {
+              data: newFrameData,
+            },
+            () => {
+              this.lastFrameDataHashMap = {};
+              this.createHashMap(this.state.data);
+            }
+          );
+        }
+        // else if (messageData.type === "frame_diff_data") {
+        //   const patchedFrameData = applyPatch(
+        //     this.lastFrameData,
+        //     messageData.message as any
+        //   ).newDocument;
+        //   this.lastFrameData = patchedFrameData;
+        //   this.setState({
+        //     data: patchedFrameData.message,
+        //   });
+        // }
+        else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else {
           MPCore.plugins.forEach((plugin) => {
@@ -179,7 +255,10 @@ export class App extends Component<any, any> {
           displayingDialog={this.state.isDialogDisplaying}
           scaffold={this.state.data?.scaffold}
         />
-        <TextMeasurer scaffold={this.state.data?.scaffold} overlays={this.state.data?.overlays} />
+        <TextMeasurer
+          scaffold={this.state.data?.scaffold}
+          overlays={this.state.data?.overlays}
+        />
       </div>
     );
   }

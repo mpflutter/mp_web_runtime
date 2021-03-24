@@ -1,4 +1,5 @@
 export interface MPComponentsProps {
+  hashCode: number;
   name: string;
   attributes: { [key: string]: any };
   constraints?: MPConstraints;
@@ -13,4 +14,13 @@ export interface MPConstraints {
   hasTightWidth: boolean;
   hasTightHeight: boolean;
   measuring: boolean;
+}
+
+export interface MPDocumentProps {
+  routeId: number;
+  mainTabBar: MPComponentsProps;
+  scaffold: MPComponentsProps;
+  overlays: MPComponentsProps[];
+  diff: MPComponentsProps;
+  diffIndex: number;
 }
