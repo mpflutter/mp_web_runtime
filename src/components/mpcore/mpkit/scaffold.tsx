@@ -24,6 +24,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
   }
 
   setupDocumentMetaData() {
+    let metaElements: { [key: string]: HTMLMetaElement } = {};
     for (let index = 0; index < document.head.children.length; index++) {
       const element = document.head.children[index];
       if (element.tagName === "META") {
@@ -31,13 +32,14 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
         if (!name || name === "viewport" || name === "theme-color") {
           continue;
         }
-        document.head.removeChild(element);
+        metaElements[name] = element as HTMLMetaElement;
+        (element as HTMLMetaElement).content = "";
       }
     }
-    if (this.props.data.attributes?.metaData) { 
+    if (this.props.data.attributes?.metaData) {
       for (const key in this.props.data.attributes?.metaData) {
         const value = this.props.data.attributes?.metaData[key];
-        const element = document.createElement("meta");
+        const element = metaElements[key] ?? document.createElement("meta");
         element.name = key;
         element.content = value;
         document.head.appendChild(element);

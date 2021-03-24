@@ -132,7 +132,7 @@ export class App extends Component<any, any> {
   setupPlugins() {
     if (typeof window !== "undefined") {
       const script = document.createElement("script");
-      script.src = `${flutterBase}assets/mp_plugins.js`;
+      script.src = `${flutterBase}assets/mp_plugins.js?v=${Math.random()}`;
       script.addEventListener("load", () => {
         this.setState({});
       });
@@ -140,7 +140,7 @@ export class App extends Component<any, any> {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.type = "text/css";
-      link.href = `${flutterBase}assets/mp_plugins.css`;
+      link.href = `${flutterBase}assets/mp_plugins.css?v=${Math.random()}`;
       link.media = "all";
       document.head.appendChild(link);
     }
