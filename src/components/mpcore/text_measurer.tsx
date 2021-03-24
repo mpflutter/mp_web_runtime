@@ -74,6 +74,7 @@ export class TextMeasurer extends React.Component<
       TextMeasurer.scanRichText(scaffold.attributes?.tabBar, result);
       TextMeasurer.scanRichText(scaffold.attributes?.header, result);
       TextMeasurer.scanRichText(scaffold.attributes?.appBar, result);
+      TextMeasurer.scanRichText(scaffold.attributes?.floatingBody, result);
       TextMeasurer.scanRichText(scaffold.attributes?.bottomBar, result);
     };
     if (props?.scaffold) {

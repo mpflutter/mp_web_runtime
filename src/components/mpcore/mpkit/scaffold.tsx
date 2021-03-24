@@ -136,7 +136,9 @@ export class FloatingBody extends Component<{
           backgroundColor: cssColor(this.props.data.attributes.backgroundColor),
         }}
       >
-        {this.props.data.children?.map((it) => MPCore.render(it))}
+        {this.props.data.children?.map((it, idx) =>
+          MPCore.render(it, `item_${idx}`)
+        )}
       </div>
     );
   }
