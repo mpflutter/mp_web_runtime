@@ -21,6 +21,5 @@ export interface MPDocumentProps {
   mainTabBar: MPComponentsProps;
   scaffold: MPComponentsProps;
   overlays: MPComponentsProps[];
-  diff: MPComponentsProps;
-  diffIndex: number;
+  diffs: MPComponentsProps[];
 }

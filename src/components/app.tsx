@@ -46,13 +46,13 @@ export class App extends Component<
   }
 
   composeHashMap(data: MPDocumentProps) {
-    if (
-      data.diff &&
-      data.diffIndex &&
-      this.lastFrameDataHashMap[data.diffIndex]
-    ) {
-      Object.assign(this.lastFrameDataHashMap[data.diffIndex], {
-        ...data.diff,
+    if (data.diffs) {
+      data.diffs.forEach((diff) => {
+        if (this.lastFrameDataHashMap[diff.hashCode]) {
+          Object.assign(this.lastFrameDataHashMap[diff.hashCode], {
+            ...diff,
+          });
+        }
       });
     }
   }
