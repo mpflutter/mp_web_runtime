@@ -63,6 +63,9 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
             : "unset",
           overflow:
             this.props.data.attributes.isListBody === true ? "unset" : "hidden",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         {this.props.data.attributes.appBar ? (
@@ -72,6 +75,9 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
               top: "0px",
               left: "0px",
               right: "0px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               zIndex: 2,
             }}
           >
