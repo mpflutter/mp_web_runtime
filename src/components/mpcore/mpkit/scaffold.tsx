@@ -140,6 +140,7 @@ export class FloatingBody extends Component<{
           width: cssWidth(positioned.attributes.width),
           height: cssWidth(positioned.attributes.height),
           backgroundColor: cssColor(this.props.data.attributes.backgroundColor),
+          zIndex: 2,
         }}
       >
         {this.props.data.children?.map((it, idx) =>

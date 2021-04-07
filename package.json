@@ -35,7 +35,8 @@
     "production": [
       ">1%",
       "last 2 versions",
-      "not ie <= 8"
+      "not ie <= 8",
+      "chrome 55"
     ],
     "development": [
       "last 1 chrome version",
