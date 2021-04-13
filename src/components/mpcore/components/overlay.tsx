@@ -17,7 +17,7 @@ export class Overlay extends Component<{
           left: "0px",
           right: "0px",
           bottom: "0px",
-          zIndex: 1,
+          zIndex: 3,
           backgroundColor: cssColor(this.props.data.attributes.backgroundColor),
         }}
         onClick={(e: any) => {
