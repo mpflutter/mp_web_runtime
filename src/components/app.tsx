@@ -10,6 +10,7 @@ import { ScrollListener } from "./mpcore/scroll_listener";
 import { ScrollBehavior } from "./mpcore/scroll_behavior";
 import { TextMeasurer } from "./mpcore/text_measurer";
 import { MPComponentsProps, MPDocumentProps } from "./mpcore/component";
+import { MPJS } from "./mpcore/mpjs/mpjs";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -109,6 +110,32 @@ export class App extends Component<
         // }
         else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
+        } else if (messageData.type === "mpjs") {
+          MPJS.instance.handleMessage(
+            messageData.message,
+            (result) => {
+              App.callbackChannel(
+                JSON.stringify({
+                  type: "mpjs",
+                  message: {
+                    requestId: messageData.message.requestId,
+                    result: result,
+                  },
+                })
+              );
+            },
+            (funcId: string, args: any[]) => {
+              App.callbackChannel(
+                JSON.stringify({
+                  type: "mpjs",
+                  message: {
+                    funcId: funcId,
+                    arguments: args,
+                  },
+                })
+              );
+            }
+          );
         } else if (messageData.type === "action:web_dialogs") {
           WebDialogs.receivedWebDialogsMessage(messageData.message);
         } else {
@@ -162,18 +189,7 @@ export class App extends Component<
               this.createHashMap(this.state.data);
             }
           );
-        }
-        // else if (messageData.type === "frame_diff_data") {
-        //   const patchedFrameData = applyPatch(
-        //     this.lastFrameData,
-        //     messageData.message as any
-        //   ).newDocument;
-        //   this.lastFrameData = patchedFrameData;
-        //   this.setState({
-        //     data: patchedFrameData.message,
-        //   });
-        // }
-        else if (messageData.type === "route") {
+        } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else {
           MPCore.plugins.forEach((plugin) => {
