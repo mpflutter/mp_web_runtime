@@ -52,12 +52,19 @@ export class MPJS {
       params.objectHandler,
       params.callChain
     );
-    if (typeof callingObject === "object") {
-      const result = (callingObject[params.method] as Function).apply(
-        callingObject,
-        params.args?.map((it) => this.wrapArgument(it, funcCallback))
-      );
-      callback(this.wrapResult(result));
+    if (
+      typeof callingObject === "object" ||
+      typeof callingObject === "function"
+    ) {
+      try {
+        const result = (callingObject[params.method] as Function).apply(
+          callingObject,
+          params.args?.map((it) => this.wrapArgument(it, funcCallback))
+        );
+        callback(this.wrapResult(result));
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
@@ -105,6 +112,8 @@ export class MPJS {
         }
         funcCallback(funcId, cbArgs);
       };
+    } else if (typeof arg === "string" && arg.startsWith("obj:")) {
+      return this.objectRefs[arg.replace("obj:", "")];
     } else {
       return arg;
     }
