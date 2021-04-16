@@ -4,7 +4,6 @@ import ReactDOM from "react-dom";
 
 import { MPCore } from "./mpcore/mpcore";
 import { WebDialogs } from "./mpcore/components/web_dialogs";
-// import { applyPatch } from "fast-json-patch";
 import { Overlay } from "./mpcore/components/overlay";
 import { ScrollListener } from "./mpcore/scroll_listener";
 import { ScrollBehavior } from "./mpcore/scroll_behavior";
@@ -97,18 +96,7 @@ export class App extends Component<
               this.createHashMap(this.state.data);
             }
           );
-        }
-        //  else if (messageData.type === "frame_diff_data") {
-        //   const patchedFrameData = applyPatch(
-        //     this.lastFrameData,
-        //     messageData.message as any
-        //   ).newDocument;
-        //   this.lastFrameData = patchedFrameData;
-        //   this.setState({
-        //     data: patchedFrameData.message,
-        //   });
-        // }
-        else if (messageData.type === "route") {
+        } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
           MPJS.instance.handleMessage(
@@ -191,6 +179,34 @@ export class App extends Component<
           );
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
+        } else if (messageData.type === "mpjs") {
+          setTimeout(() => {
+            MPJS.instance.handleMessage(
+              messageData.message,
+              (result) => {
+                App.callbackChannel(
+                  JSON.stringify({
+                    type: "mpjs",
+                    message: {
+                      requestId: messageData.message.requestId,
+                      result: result,
+                    },
+                  })
+                );
+              },
+              (funcId: string, args: any[]) => {
+                App.callbackChannel(
+                  JSON.stringify({
+                    type: "mpjs",
+                    message: {
+                      funcId: funcId,
+                      arguments: args,
+                    },
+                  })
+                );
+              }
+            );
+          }, 4);
         } else {
           MPCore.plugins.forEach((plugin) => {
             plugin.onMessage?.call(this, messageData);
