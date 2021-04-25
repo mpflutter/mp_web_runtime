@@ -33,7 +33,7 @@ export class Overlay extends Component<{
           e.stopPropagation();
         }}
       >
-        {MPCore.render(this.props.data.children[0])}
+        {MPCore.render(this.props.data.children?.[0])}
       </div>
     );
   }

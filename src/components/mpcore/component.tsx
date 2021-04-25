@@ -1,5 +1,6 @@
 export interface MPComponentsProps {
   hashCode: number;
+  "^": number;
   name: string;
   attributes: { [key: string]: any };
   constraints?: MPConstraints;

@@ -33,15 +33,42 @@ export class App extends Component<
     }
     if (obj) {
       for (const key in obj) {
-        if (typeof key === "string") {
-          if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const value = obj[key];
-            if (typeof value === "object") {
-              this.createHashMap(value);
+        if (typeof key === "string" || typeof key === "number") {
+          const value = obj[key];
+          if (typeof value === "object") {
+            this.createHashMap(value);
+          }
+        }
+      }
+    }
+  }
+
+  composeSameMap(data: MPDocumentProps) {
+    if (this.lastFrameData) {
+      this.composeSameElement(data.scaffold);
+      if (data.scaffold?.attributes) {
+        for (const key in data.scaffold.attributes) {
+          if (
+            Object.prototype.hasOwnProperty.call(data.scaffold.attributes, key)
+          ) {
+            const element = data.scaffold.attributes[key];
+            if (element && element.hashCode) {
+              this.composeSameElement(element);
             }
           }
         }
       }
+    }
+  }
+
+  composeSameElement(data: MPComponentsProps) {
+    if (!data) return;
+    if (data["^"] === 1) {
+      Object.assign(data, { ...this.lastFrameDataHashMap[data.hashCode] });
+    } else if (data.children) {
+      data.children.forEach((child) => {
+        this.composeSameElement(child);
+      });
     }
   }
 
@@ -74,28 +101,22 @@ export class App extends Component<
       try {
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
-          this.lastFrameData = messageData;
-          this.setState(
-            {
-              data: messageData.message,
-            },
-            () => {
-              this.lastFrameDataHashMap = {};
-              this.createHashMap(this.state.data);
-            }
-          );
+          this.composeSameMap(messageData.message);
+          this.lastFrameData = messageData.message;
+          this.setState({
+            data: messageData.message,
+          });
+          this.lastFrameDataHashMap = {};
+          this.createHashMap(messageData.message);
         } else if (messageData.type === "diff_data") {
           let newFrameData = this.state.data;
           this.composeHashMap(messageData.message);
-          this.setState(
-            {
-              data: newFrameData,
-            },
-            () => {
-              this.lastFrameDataHashMap = {};
-              this.createHashMap(this.state.data);
-            }
-          );
+          this.lastFrameData = newFrameData;
+          this.setState({
+            data: newFrameData,
+          });
+          this.lastFrameDataHashMap = {};
+          this.createHashMap(newFrameData);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
@@ -155,28 +176,22 @@ export class App extends Component<
       try {
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
-          this.lastFrameData = messageData;
-          this.setState(
-            {
-              data: messageData.message,
-            },
-            () => {
-              this.lastFrameDataHashMap = {};
-              this.createHashMap(this.state.data);
-            }
-          );
+          this.composeSameMap(messageData.message);
+          this.lastFrameData = messageData.message;
+          this.setState({
+            data: messageData.message,
+          });
+          this.lastFrameDataHashMap = {};
+          this.createHashMap(messageData.message);
         } else if (messageData.type === "diff_data") {
           let newFrameData = this.state.data;
           this.composeHashMap(messageData.message);
-          this.setState(
-            {
-              data: newFrameData,
-            },
-            () => {
-              this.lastFrameDataHashMap = {};
-              this.createHashMap(this.state.data);
-            }
-          );
+          this.lastFrameData = newFrameData;
+          this.setState({
+            data: newFrameData,
+          });
+          this.lastFrameDataHashMap = {};
+          this.createHashMap(newFrameData);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
@@ -279,7 +294,7 @@ export class App extends Component<
         )}
         {this.state.data?.overlays?.length > 0
           ? this.state.data.overlays.map((it: any, index: number) => (
-              <Overlay key={`overlay_${this.props.index}`} data={it} />
+              <Overlay key={`overlay_${index}`} data={it} />
             ))
           : null}
         <ScrollListener />
