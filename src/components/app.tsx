@@ -24,7 +24,6 @@ export class App extends Component<
 
   state: any = {};
 
-  lastFrameData?: { data: MPDocumentProps };
   lastFrameDataHashMap: { [key: number]: MPComponentsProps } = {};
 
   createHashMap(obj: any) {
@@ -43,38 +42,33 @@ export class App extends Component<
     }
   }
 
-  composeSameMap(data: MPDocumentProps) {
-    if (this.lastFrameData) {
-      this.composeSameElement(data.scaffold);
-      if (data.scaffold?.attributes) {
-        for (const key in data.scaffold.attributes) {
-          if (
-            Object.prototype.hasOwnProperty.call(data.scaffold.attributes, key)
-          ) {
-            const element = data.scaffold.attributes[key];
-            if (element && element.hashCode) {
-              this.composeSameElement(element);
-            }
-          }
-        }
-      }
+  composeSameMap(data: any) {
+    if (typeof data !== "object" || data === null || data === undefined) {
+      return;
     }
-  }
-
-  composeSameElement(data: MPComponentsProps) {
-    if (!data) return;
-    if (data["^"] === 1) {
-      Object.assign(data, { ...this.lastFrameDataHashMap[data.hashCode] });
-    } else if (data.children) {
-      data.children.forEach((child) => {
-        this.composeSameElement(child);
-      });
+    for (const key in data) {
+      let element = data[key];
+      if (
+        typeof element !== "object" ||
+        element === null ||
+        element === undefined
+      ) {
+        continue;
+      }
+      if (element.hashCode && element["^"] === 1) {
+        Object.assign(element, {
+          ...this.lastFrameDataHashMap[element.hashCode],
+        });
+      } else {
+        this.composeSameMap(element);
+      }
     }
   }
 
   composeHashMap(data: MPDocumentProps) {
     if (data.diffs) {
       data.diffs.forEach((diff) => {
+        this.composeSameMap(diff);
         if (this.lastFrameDataHashMap[diff.hashCode]) {
           Object.assign(this.lastFrameDataHashMap[diff.hashCode], {
             ...diff,
@@ -102,20 +96,16 @@ export class App extends Component<
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
           this.composeSameMap(messageData.message);
-          this.lastFrameData = messageData.message;
           this.setState({
             data: messageData.message,
           });
-          this.lastFrameDataHashMap = {};
           this.createHashMap(messageData.message);
         } else if (messageData.type === "diff_data") {
           let newFrameData = this.state.data;
           this.composeHashMap(messageData.message);
-          this.lastFrameData = newFrameData;
           this.setState({
             data: newFrameData,
           });
-          this.lastFrameDataHashMap = {};
           this.createHashMap(newFrameData);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
@@ -152,7 +142,9 @@ export class App extends Component<
             plugin.onMessage?.call(this, messageData);
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     };
     socket.onopen = () => {
       this.setupFonts();
@@ -177,20 +169,16 @@ export class App extends Component<
         const messageData = JSON.parse(event.data);
         if (messageData.type === "frame_data") {
           this.composeSameMap(messageData.message);
-          this.lastFrameData = messageData.message;
           this.setState({
             data: messageData.message,
           });
-          this.lastFrameDataHashMap = {};
           this.createHashMap(messageData.message);
         } else if (messageData.type === "diff_data") {
           let newFrameData = this.state.data;
           this.composeHashMap(messageData.message);
-          this.lastFrameData = newFrameData;
           this.setState({
             data: newFrameData,
           });
-          this.lastFrameDataHashMap = {};
           this.createHashMap(newFrameData);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);

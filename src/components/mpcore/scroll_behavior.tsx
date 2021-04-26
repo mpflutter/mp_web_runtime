@@ -16,7 +16,7 @@ export class ScrollBehavior extends React.Component<{
   setupBodyScrollBehavior() {
     if (this.props.displayingDialog) {
       document.body.style.setProperty("overflow", "hidden");
-    } else if (this.props.scaffold?.attributes.isListBody === true) {
+    } else if (this.props.scaffold?.attributes?.isListBody === true) {
       document.body.style.setProperty("overflow", "unset");
     } else {
       document.body.style.setProperty("overflow", "hidden");
