@@ -107,6 +107,10 @@ export class App extends Component<
             data: newFrameData,
           });
           this.createHashMap(newFrameData);
+        } else if (messageData.type === "element_gc") {
+          (messageData.message as number[]).forEach((it) => {
+            delete this.lastFrameDataHashMap[it];
+          });
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
@@ -180,6 +184,10 @@ export class App extends Component<
             data: newFrameData,
           });
           this.createHashMap(newFrameData);
+        } else if (messageData.type === "element_gc") {
+          (messageData.message as number[]).forEach((it) => {
+            delete this.lastFrameDataHashMap[it];
+          });
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
