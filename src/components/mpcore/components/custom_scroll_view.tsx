@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { cssConstraints } from "../utils/geometry";
 import { MPComponentsProps } from "../component";
 
-export class CustomScrollView extends Component<{ data: MPComponentsProps }> {
+export class CustomScrollView extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     let constraints = cssConstraints(this.props.data.constraints);
     if (this.props.data.attributes.isRoot) {

@@ -1,8 +1,8 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 
-export class Flexible extends Component<{ data: MPComponentsProps }> {
+export class Flexible extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div

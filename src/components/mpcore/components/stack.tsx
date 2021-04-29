@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssConstraints } from "../utils/geometry";
 
-export class Stack extends Component<{ data: MPComponentsProps }> {
+export class Stack extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div

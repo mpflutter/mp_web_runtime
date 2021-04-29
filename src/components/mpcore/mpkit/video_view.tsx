@@ -1,8 +1,8 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 import { cssConstraints } from "../utils/geometry";
 
-export class MPVideoView extends Component<{ data: MPComponentsProps }> {
+export class MPVideoView extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <video

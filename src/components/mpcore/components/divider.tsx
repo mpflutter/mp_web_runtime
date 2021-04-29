@@ -1,10 +1,10 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
 import { cssHeight } from "../utils/geometry";
 import React from "react";
 
-export class Divider extends Component<{ data: MPComponentsProps }> {
+export class Divider extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div

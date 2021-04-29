@@ -1,10 +1,10 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 import { MPCore } from "../mpcore";
 import { cssColor } from "../utils/color";
 import { cssWidth } from "../utils/geometry";
 
-export class MPScaffold extends Component<{ data: MPComponentsProps }> {
+export class MPScaffold extends PureComponent<{ data: MPComponentsProps }> {
   componentDidMount() {
     this.setupDocumentTitle();
     this.setupDocumentMetaData();
@@ -121,7 +121,7 @@ export class MPScaffold extends Component<{ data: MPComponentsProps }> {
   }
 }
 
-export class FloatingBody extends Component<{
+export class FloatingBody extends PureComponent<{
   data: MPComponentsProps;
 }> {
   render() {

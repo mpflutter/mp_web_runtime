@@ -1,6 +1,6 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 
-export class Div extends Component {
+export class Div extends PureComponent {
   render() {
     return this.props.children;
   }

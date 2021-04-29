@@ -1,8 +1,8 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 
-export class AbsorbPointer extends Component<{
+export class AbsorbPointer extends PureComponent<{
   data: MPComponentsProps;
 }> {
   render() {

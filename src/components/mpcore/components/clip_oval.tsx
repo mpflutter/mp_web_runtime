@@ -1,7 +1,7 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 
-export class ClipOval extends Component {
+export class ClipOval extends PureComponent {
   render() {
     return (
       <div

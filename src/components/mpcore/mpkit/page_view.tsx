@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 import Swiper from "swiper";
 import { cssConstraints } from "../utils/geometry";
 
-export class MPPageView extends Component<{ data: MPComponentsProps }> {
+export class MPPageView extends PureComponent<{ data: MPComponentsProps }> {
   ref = `swiper-container-${Math.random().toString().replace(".", "")}`;
   swiperInstance: Swiper | undefined;
 

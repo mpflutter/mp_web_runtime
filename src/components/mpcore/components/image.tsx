@@ -1,10 +1,10 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { flutterBase } from "../../app";
 import { MPComponentsProps } from "../component";
 import { cssConstraints, cssHeight, cssWidth } from "../utils/geometry";
 
-export class Image extends Component<{ data: MPComponentsProps }> {
+export class Image extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     let imgConstraints: any = cssConstraints(this.props.data.constraints);
     imgConstraints.minWidth = imgConstraints.maxWidth;

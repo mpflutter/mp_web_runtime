@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssConstraints } from "../utils/geometry";
 
-export class ConstrainedBox extends Component<{ data: MPComponentsProps }> {
+export class ConstrainedBox extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     if (!this.props.children || !(this.props.children as any).length) {
       return (

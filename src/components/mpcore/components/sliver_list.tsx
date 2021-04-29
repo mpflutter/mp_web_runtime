@@ -1,7 +1,7 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 
-export class SliverList extends Component {
+export class SliverList extends PureComponent {
     render() {
         return <div>{this.props.children}</div>;
     }

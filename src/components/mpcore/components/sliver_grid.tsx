@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import {
   renderSliverGridDelegateWithFixedCrossAxisCount,
@@ -8,7 +8,7 @@ import {
 import { MPComponentsProps } from "../component";
 // import { cssPadding } from "../utils/geometry";
 
-export class SliverGrid extends Component<{ data: MPComponentsProps }> {
+export class SliverGrid extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div

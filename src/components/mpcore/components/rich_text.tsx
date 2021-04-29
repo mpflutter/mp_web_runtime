@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
@@ -6,7 +6,7 @@ import { cssTextAlign, cssTextStyle } from "../utils/text";
 import { MPCore } from "../mpcore";
 import { cssConstraints } from "../utils/geometry";
 
-export class RichText extends Component<{ data: MPComponentsProps }> {
+export class RichText extends PureComponent<{ data: MPComponentsProps }> {
 
   render() {
     let style = {};
@@ -88,7 +88,7 @@ const jsxComponentFromSpan = (it: any, idx: number) => {
   }
 };
 
-export class TextSpan extends Component<any> {
+export class TextSpan extends PureComponent<any> {
   render() {
     return (
       <span
@@ -119,7 +119,7 @@ export class TextSpan extends Component<any> {
   }
 }
 
-export class WidgetSpan extends Component<any> {
+export class WidgetSpan extends PureComponent<any> {
   render() {
     return (
       <div style={{ display: "inline-flex" }}>

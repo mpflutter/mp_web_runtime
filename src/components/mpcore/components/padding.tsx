@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssPadding } from "../utils/geometry";
 
-export class Padding extends Component<{ data: MPComponentsProps }> {
+export class Padding extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div

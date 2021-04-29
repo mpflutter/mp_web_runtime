@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 
-export class GestureDetector extends Component<{ data: MPComponentsProps }> {
+export class GestureDetector extends PureComponent<{ data: MPComponentsProps }> {
   state = { touching: false };
 
   render() {

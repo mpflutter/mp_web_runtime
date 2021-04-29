@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssBorder } from "../utils/border";
@@ -6,7 +6,7 @@ import { cssColor, cssGradient } from "../utils/color";
 import { cssBorderRadius, cssConstraints, cssOffset } from "../utils/geometry";
 import { flutterBase } from "../../app";
 
-export class DecoratedBox extends Component<{ data: MPComponentsProps }> {
+export class DecoratedBox extends PureComponent<{ data: MPComponentsProps }> {
   renderDecoration() {
     let output: any = {};
     if (this.props.data.attributes.color) {

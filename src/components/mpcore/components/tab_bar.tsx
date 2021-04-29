@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 
-export class TabBar extends Component<{
+export class TabBar extends PureComponent<{
   data: MPComponentsProps;
   nested?: boolean;
 }> {

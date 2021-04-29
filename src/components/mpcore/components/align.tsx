@@ -1,9 +1,9 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssConstraints } from "../utils/geometry";
 
-export class Align extends Component<{ data: MPComponentsProps }> {
+export class Align extends PureComponent<{ data: MPComponentsProps }> {
   alignStyles() {
     let alignments = this.props.data.attributes.alignment;
     let justifyContent;

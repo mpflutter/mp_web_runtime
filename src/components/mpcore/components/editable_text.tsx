@@ -1,11 +1,11 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { cssTextAlign, cssTextStyle } from "../utils/text";
 import { App } from "../../app";
 import { MPComponentsProps } from "../component";
 import React from "react";
 import { cssConstraints } from "../utils/geometry";
 
-export class EditableText extends Component<{ data: MPComponentsProps }> {
+export class EditableText extends PureComponent<{ data: MPComponentsProps }> {
   _lastValue: any;
 
   _onSubmitted(target: HTMLInputElement, value: string) {

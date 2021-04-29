@@ -1,7 +1,7 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 
-export class SliverPersistentHeader extends Component<{
+export class SliverPersistentHeader extends PureComponent<{
   data: MPComponentsProps;
 }> {
   render() {

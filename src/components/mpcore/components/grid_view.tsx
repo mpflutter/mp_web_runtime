@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import {
@@ -8,7 +8,7 @@ import {
 } from "./grid_waterfall_layout";
 import { cssConstraints } from "../utils/geometry";
 
-export class GridView extends Component<{ data: MPComponentsProps }> {
+export class GridView extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     let constraints = cssConstraints(this.props.data.constraints);
     if (this.props.data.attributes.isRoot) {
@@ -90,7 +90,7 @@ export class GridView extends Component<{ data: MPComponentsProps }> {
   }
 }
 
-export class SliverWaterfallItem extends Component<{
+export class SliverWaterfallItem extends PureComponent<{
   data: MPComponentsProps;
 }> {
   render() {

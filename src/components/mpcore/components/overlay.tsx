@@ -1,11 +1,11 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
 import { MPCore } from "../mpcore";
 import { App } from "../../app";
 
-export class Overlay extends Component<{
+export class Overlay extends PureComponent<{
   data: MPComponentsProps;
 }> {
   render() {

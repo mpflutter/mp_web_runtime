@@ -1,8 +1,8 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import { MPComponentsProps } from "../component";
 import { cssConstraints, cssPadding } from "../utils/geometry";
 
-export class ListView extends Component<{ data: MPComponentsProps }> {
+export class ListView extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     let constraints = cssConstraints(this.props.data.constraints);
     if (this.props.data.attributes.isRoot) {

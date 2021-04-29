@@ -1,10 +1,10 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 import React from "react";
 import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
 import { cssConstraints } from "../utils/geometry";
 
-export class ColoredBox extends Component<{ data: MPComponentsProps }> {
+export class ColoredBox extends PureComponent<{ data: MPComponentsProps }> {
   render() {
     return (
       <div
