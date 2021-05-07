@@ -58,6 +58,13 @@ export function cssTextStyle(data: any): CSSProperties {
     if (data.backgroundColor != null) {
       style.backgroundColor = cssColor(data.backgroundColor);
     }
+    if (data.decoration) {
+      if (data.decoration === "TextDecoration.lineThrough") {
+        style.textDecoration = "line-through";
+      } else if (data.decoration === "TextDecoration.underline") {
+        style.textDecoration = "underline";
+      }
+    }
   }
   return style;
 }
