@@ -24,7 +24,11 @@ export class DecoratedBox extends PureComponent<{ data: MPComponentsProps }> {
           }
         }
       })()}")`;
-      output["backgroundSize"] = "contain";
+      if (this.props.data.attributes.image.fit === "BoxFit.cover") {
+        output["backgroundSize"] = "cover";
+      } else {
+        output["backgroundSize"] = "contain";
+      }
     }
     if (this.props.data.attributes.decoration?.gradient) {
       if (output["backgroundImage"]) {
