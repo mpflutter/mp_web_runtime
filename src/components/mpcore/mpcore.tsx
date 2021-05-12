@@ -35,6 +35,7 @@ import { SliverGrid } from "./components/sliver_grid";
 import { Wrap } from "./components/wrap";
 import { SliverPersistentHeader } from "./components/sliver_persistent_header";
 import { MPKit } from "./mpkit/mpkit";
+import { CustomPaint } from "./components/custom_paint";
 
 export class MPCore {
   static components: { [key: string]: ComponentType<any> } = {
@@ -72,6 +73,7 @@ export class MPCore {
     wrap: Wrap,
     sliver_waterfall_item: SliverWaterfallItem,
     sliver_persistent_header: SliverPersistentHeader,
+    custom_paint: CustomPaint,
     ...MPKit.components,
   };
 
