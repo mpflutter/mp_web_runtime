@@ -24,15 +24,35 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
     if (this.theCanvas) {
       const ctx = this.theCanvas.getContext("2d");
       if (!ctx) return;
+      ctx.save();
       (this.props.data.attributes.commands as any[]).forEach((cmd) => {
         if (cmd.action === "drawRect") {
           this.drawRect(ctx, cmd);
         } else if (cmd.action === "drawPath") {
           this.drawPath(ctx, cmd);
+        } else if (cmd.action === "drawDRRect") {
+          this.drawDRRect(ctx, cmd);
+        } else if (cmd.action === "clipPath") {
+          this.drawPath(ctx, cmd);
         } else if (cmd.action === "drawColor") {
           this.drawColor(ctx, cmd);
+        } else if (cmd.action === "restore") {
+          ctx.restore();
+        } else if (cmd.action === "rotate") {
+          ctx.rotate(cmd.radians);
+        } else if (cmd.action === "save") {
+          ctx.save();
+        } else if (cmd.action === "scale") {
+          ctx.scale(cmd.sx, cmd.sy);
+        } else if (cmd.action === "skew") {
+          ctx.transform(1.0, cmd.sy, cmd.sx, 1.0, 0.0, 0.0);
+        } else if (cmd.action === "transform") {
+          ctx.transform(cmd.a, cmd.b, cmd.c, cmd.d, cmd.tx, cmd.ty);
+        } else if (cmd.action === "translate") {
+          ctx.translate(cmd.dx, cmd.dy);
         }
       });
+      ctx.restore();
     }
   }
 
@@ -47,8 +67,40 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
 
   drawPath(ctx: CanvasRenderingContext2D, params: any) {
     this.setPaint(ctx, params.paint);
+    this.drawRealPath(ctx, params.path);
+    if (params.action === "clipPath") {
+      ctx.clip();
+    } else if (params.paint.style === "PaintingStyle.fill") {
+      ctx.fill();
+    } else {
+      ctx.stroke();
+    }
+  }
+
+  drawDRRect(ctx: CanvasRenderingContext2D, params: any) {
+    const offscreenCanvas = document.createElement("canvas");
+    offscreenCanvas.width = ctx.canvas.width;
+    offscreenCanvas.height = ctx.canvas.height;
+    const offscreenContext = offscreenCanvas.getContext("2d")!;
+    this.setPaint(offscreenContext, params.paint);
+    this.drawRealPath(offscreenContext, params.outer);
+    if (params.paint.style === "PaintingStyle.fill") {
+      offscreenContext.fill();
+    } else {
+      offscreenContext.stroke();
+    }
+    offscreenContext.save();
+    offscreenContext.fillStyle = "white";
+    offscreenContext.globalCompositeOperation = "xor";
+    this.drawRealPath(offscreenContext, params.inner);
+    offscreenContext.fill();
+    offscreenContext.restore();
+    ctx.drawImage(offscreenCanvas, 0, 0);
+  }
+
+  drawRealPath(ctx: CanvasRenderingContext2D, path: any) {
     ctx.beginPath();
-    (params.path.commands as any[]).forEach((it) => {
+    (path.commands as any[]).forEach((it) => {
       if (it.action === "moveTo") {
         ctx.moveTo(it.x, it.y);
       } else if (it.action === "lineTo") {
@@ -80,11 +132,6 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
         ctx.closePath();
       }
     });
-    if (params.paint.style === "PaintingStyle.fill") {
-      ctx.fill();
-    } else {
-      ctx.stroke();
-    }
   }
 
   drawColor(ctx: CanvasRenderingContext2D, params: any) {
@@ -97,6 +144,7 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
   }
 
   setPaint(ctx: CanvasRenderingContext2D, paint: any) {
+    if (!paint) return;
     ctx.lineWidth = paint.strokeWidth;
     ctx.miterLimit = paint.strokeMiterLimit;
     ctx.lineCap = paint.strokeCap.replace("StrokeCap.", "");
