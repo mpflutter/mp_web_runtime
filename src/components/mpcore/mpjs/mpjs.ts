@@ -100,7 +100,7 @@ export class MPJS {
     return currentObject;
   }
 
-  wrapArgument(arg: any, funcCallback: (funcId: string, args: any[]) => void) {
+  wrapArgument(arg: any, funcCallback: (funcId: string, args: any[]) => void): any {
     if (typeof arg === "string" && arg.startsWith("func:")) {
       const funcId = arg;
       const self = this;
@@ -114,6 +114,14 @@ export class MPJS {
       };
     } else if (typeof arg === "string" && arg.startsWith("obj:")) {
       return this.objectRefs[arg.replace("obj:", "")];
+    } else if (typeof arg === "object" && arg instanceof Array) {
+      return arg.map((it) => this.wrapArgument(it, funcCallback));
+    } else if (typeof arg === "object") {
+      let newArgs: any = {};
+      for (const key in arg) {
+        newArgs[key] = this.wrapArgument(arg[key], funcCallback);
+      }
+      return newArgs;
     } else {
       return arg;
     }
