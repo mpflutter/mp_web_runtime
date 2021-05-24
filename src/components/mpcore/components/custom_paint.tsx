@@ -1,7 +1,63 @@
 import { PureComponent } from "react";
+import App from "../../app";
 import { MPComponentsProps } from "../component";
 import { cssColor } from "../utils/color";
 import { cssConstraints } from "../utils/geometry";
+
+export class MPDrawable {
+  static decodedDrawables: { [key: string]: HTMLImageElement } = {};
+
+  static async decodeDrawable(params: any) {
+    try {
+      if (params.type === "networkImage") {
+        console.log(params);
+
+        const result = await this.decodeNetworkImage(params.url, params.target);
+        App.callbackChannel(
+          JSON.stringify({
+            type: "decode_drawable",
+            message: {
+              event: "onDecode",
+              target: params.target,
+              width: result.width,
+              height: result.height,
+            },
+          })
+        );
+      } else {
+        throw new Error("Unknown drawable type.");
+      }
+    } catch (error) {
+      App.callbackChannel(
+        JSON.stringify({
+          type: "decode_drawable",
+          message: {
+            event: "onError",
+            target: params.target,
+            error: error?.toString(),
+          },
+        })
+      );
+    }
+  }
+
+  static async decodeNetworkImage(
+    url: string,
+    hashCode: number
+  ): Promise<{ width: number; height: number }> {
+    return new Promise((res, rej) => {
+      const img = document.createElement("img");
+      img.onload = function () {
+        MPDrawable.decodedDrawables[hashCode] = img;
+        res({ width: img.width, height: img.height });
+      };
+      img.onerror = function () {
+        rej("");
+      };
+      img.src = url;
+    });
+  }
+}
 
 export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
   setCanvasRef: any;
@@ -36,6 +92,10 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
           this.drawPath(ctx, cmd);
         } else if (cmd.action === "drawColor") {
           this.drawColor(ctx, cmd);
+        } else if (cmd.action === "drawImage") {
+          this.drawImage(ctx, cmd);
+        } else if (cmd.action === "drawImageRect") {
+          this.drawImageRect(ctx, cmd);
         } else if (cmd.action === "restore") {
           ctx.restore();
         } else if (cmd.action === "rotate") {
@@ -143,6 +203,32 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
     }
   }
 
+  drawImage(ctx: CanvasRenderingContext2D, params: any) {
+    this.setPaint(ctx, params.paint);
+    const drawable = MPDrawable.decodedDrawables[params.drawable];
+    if (drawable) {
+      ctx.drawImage(drawable, params.dx, params.dy);
+    }
+  }
+
+  drawImageRect(ctx: CanvasRenderingContext2D, params: any) {
+    this.setPaint(ctx, params.paint);
+    const drawable = MPDrawable.decodedDrawables[params.drawable];
+    if (drawable) {
+      ctx.drawImage(
+        drawable,
+        params.srcX,
+        params.srcY,
+        params.srcW,
+        params.srcH,
+        params.dstX,
+        params.dstY,
+        params.dstW,
+        params.dstH
+      );
+    }
+  }
+
   setPaint(ctx: CanvasRenderingContext2D, paint: any) {
     if (!paint) return;
     ctx.lineWidth = paint.strokeWidth;
@@ -156,6 +242,7 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
       ctx.fillStyle = "transparent";
       ctx.strokeStyle = cssColor(paint.color);
     }
+    ctx.globalAlpha = paint.alpha ?? 1.0;
   }
 
   render() {

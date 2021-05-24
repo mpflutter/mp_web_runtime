@@ -10,6 +10,7 @@ import { ScrollBehavior } from "./mpcore/scroll_behavior";
 import { TextMeasurer } from "./mpcore/text_measurer";
 import { MPComponentsProps, MPDocumentProps } from "./mpcore/component";
 import { MPJS } from "./mpcore/mpjs/mpjs";
+import { MPDrawable } from "./mpcore/components/custom_paint";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -111,6 +112,8 @@ export class App extends Component<
           (messageData.message as number[]).forEach((it) => {
             delete this.lastFrameDataHashMap[it];
           });
+        } else if (messageData.type === "decode_drawable") {
+          MPDrawable.decodeDrawable(messageData.message);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
@@ -188,6 +191,8 @@ export class App extends Component<
           (messageData.message as number[]).forEach((it) => {
             delete this.lastFrameDataHashMap[it];
           });
+        } else if (messageData.type === "decode_drawable") {
+          MPDrawable.decodeDrawable(messageData.message);
         } else if (messageData.type === "route") {
           Router.receivedRouteMessage(messageData.message);
         } else if (messageData.type === "mpjs") {
