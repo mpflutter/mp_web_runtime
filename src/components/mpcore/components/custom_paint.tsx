@@ -10,9 +10,20 @@ export class MPDrawable {
   static async decodeDrawable(params: any) {
     try {
       if (params.type === "networkImage") {
-        console.log(params);
-
         const result = await this.decodeNetworkImage(params.url, params.target);
+        App.callbackChannel(
+          JSON.stringify({
+            type: "decode_drawable",
+            message: {
+              event: "onDecode",
+              target: params.target,
+              width: result.width,
+              height: result.height,
+            },
+          })
+        );
+      } else if (params.type === "memoryImage") {
+        const result = await this.decodeMemoryImage(params.data, params.target);
         App.callbackChannel(
           JSON.stringify({
             type: "decode_drawable",
@@ -55,6 +66,23 @@ export class MPDrawable {
         rej("");
       };
       img.src = url;
+    });
+  }
+
+  static async decodeMemoryImage(
+    data: string,
+    hashCode: number
+  ): Promise<{ width: number; height: number }> {
+    return new Promise((res, rej) => {
+      const img = document.createElement("img");
+      img.onload = function () {
+        MPDrawable.decodedDrawables[hashCode] = img;
+        res({ width: img.width, height: img.height });
+      };
+      img.onerror = function () {
+        rej("");
+      };
+      img.src = `data:text/plain;base64,${data}`;
     });
   }
 }
