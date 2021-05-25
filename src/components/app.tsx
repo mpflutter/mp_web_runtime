@@ -19,7 +19,7 @@ export const flutterFonts = [
 
 export class App extends Component<
   any,
-  { isDialogDisplaying: boolean; data: MPDocumentProps }
+  { isConnecting: boolean; isDialogDisplaying: boolean; data: MPDocumentProps }
 > {
   static callbackChannel: (message: string) => void = () => {};
 
@@ -88,6 +88,7 @@ export class App extends Component<
   }
 
   setupDartChannel() {
+    this.setState({ isConnecting: true });
     flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
     const socket = new WebSocket(
       `ws://${new URL(window.location.href).hostname}:9898/`
@@ -154,10 +155,12 @@ export class App extends Component<
       }
     };
     socket.onopen = () => {
+      this.setState({ isConnecting: false });
       this.setupFonts();
       this.setupPlugins();
     };
     socket.onclose = () => {
+      this.setState({ isConnecting: true });
       setTimeout(() => {
         this.setupDartChannel();
       }, 1000);
@@ -307,7 +310,27 @@ export class App extends Component<
           scaffold={this.state.data?.scaffold}
           overlays={this.state.data?.overlays}
         />
+        {this.state.isConnecting ? this.renderConnectingTips() : null}
       </div>
+    );
+  }
+
+  renderConnectingTips() {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          width: "100%",
+          top: "0",
+          backgroundColor: "red",
+          color: "white",
+          fontSize: 12,
+          fontWeight: "bold",
+          height: "20px",
+          textAlign: "center",
+          lineHeight: "20px",
+        }}
+      >Connecting to {(new URL(window.location.href)).hostname} ...</div>
     );
   }
 
