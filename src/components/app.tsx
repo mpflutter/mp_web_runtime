@@ -91,7 +91,7 @@ export class App extends Component<
     this.setState({ isConnecting: true });
     flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
     const socket = new WebSocket(
-      `ws://${new URL(window.location.href).hostname}:9898/`
+      `ws://${new URL(window.location.href).hostname}:9898/ws?clientType=web`
     );
     socket.onmessage = (event) => {
       try {
