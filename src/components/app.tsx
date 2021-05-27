@@ -239,6 +239,7 @@ export class App extends Component<
     App.callbackChannel = (message) => {
       window.postMessage(message, "*");
     };
+    (window as any).mpClientAttached = true;
   }
 
   setupFonts() {
