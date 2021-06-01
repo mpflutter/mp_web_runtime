@@ -10,6 +10,7 @@ export class GestureDetector extends PureComponent<{ data: MPComponentsProps }> 
     return (
       <div
         className={this.state.touching ? "gesture_detector_hover" : ""}
+        style={{cursor: "pointer"}}
         onTouchStart={() => {
           this.setState({ touching: true });
         }}

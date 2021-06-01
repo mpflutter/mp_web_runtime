@@ -89,10 +89,19 @@ export class App extends Component<
 
   setupDartChannel() {
     this.setState({ isConnecting: true });
-    flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
-    const socket = new WebSocket(
-      `ws://${new URL(window.location.href).hostname}:9898/ws?clientType=web`
-    );
+    let socket: WebSocket;
+    if (new URL(window.location.href).host.endsWith(".gitpod.io")) {
+      flutterBase = `https://${new URL(window.location.href).hostname}/`;
+      socket = new WebSocket(
+        `wsw://${new URL(window.location.href).hostname}/ws?clientType=web`
+      );
+    }
+    else {
+      flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
+      socket = new WebSocket(
+        `ws://${new URL(window.location.href).hostname}:9898/ws?clientType=web`
+      );
+    }
     socket.onmessage = (event) => {
       try {
         const messageData = JSON.parse(event.data);

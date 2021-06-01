@@ -25,7 +25,10 @@ function getBaselineStyle(data: any) {
 }
 
 export function cssTextStyle(data: any): CSSProperties {
-  let style: CSSProperties = {};
+  let style: CSSProperties = {
+    userSelect: "none",
+    WebkitUserSelect: "none",
+  };
 
   if (data != null) {
     if (data.fontFamily) {
