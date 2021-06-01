@@ -93,7 +93,7 @@ export class App extends Component<
     if (new URL(window.location.href).host.endsWith(".gitpod.io")) {
       flutterBase = `https://${new URL(window.location.href).hostname}/`;
       socket = new WebSocket(
-        `wsw://${new URL(window.location.href).hostname}/ws?clientType=web`
+        `wss://${new URL(window.location.href).hostname}/ws?clientType=web`
       );
     }
     else {
