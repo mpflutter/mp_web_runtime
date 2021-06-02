@@ -11,6 +11,7 @@ import { TextMeasurer } from "./mpcore/text_measurer";
 import { MPComponentsProps, MPDocumentProps } from "./mpcore/component";
 import { MPJS } from "./mpcore/mpjs/mpjs";
 import { MPDrawable } from "./mpcore/components/custom_paint";
+import { MPFragment } from "./fragment";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -22,6 +23,24 @@ export class App extends Component<
   { isConnecting: boolean; isDialogDisplaying: boolean; data: MPDocumentProps }
 > {
   static callbackChannel: (message: string) => void = () => {};
+
+  static initFragment(el: HTMLDivElement, route: string) {
+    ReactDOM.render(
+      <React.StrictMode>
+        <MPFragment route={route} el={el} />
+      </React.StrictMode>,
+      el
+    );
+  }
+
+  private static resendFragmentsInitEvents() {
+    for (const key in MPFragment.fragments) {
+      if (Object.prototype.hasOwnProperty.call(MPFragment.fragments, key)) {
+        const element = MPFragment.fragments[key];
+        element.sendInitEvent();
+      }
+    }
+  }
 
   state: any = {};
 
@@ -95,78 +114,20 @@ export class App extends Component<
       socket = new WebSocket(
         `wss://${new URL(window.location.href).hostname}/ws?clientType=web`
       );
-    }
-    else {
+    } else {
       flutterBase = `http://${new URL(window.location.href).hostname}:9898/`;
       socket = new WebSocket(
         `ws://${new URL(window.location.href).hostname}:9898/ws?clientType=web`
       );
     }
     socket.onmessage = (event) => {
-      try {
-        const messageData = JSON.parse(event.data);
-        if (messageData.type === "frame_data") {
-          this.composeSameMap(messageData.message);
-          this.setState({
-            data: messageData.message,
-          });
-          this.createHashMap(messageData.message);
-        } else if (messageData.type === "diff_data") {
-          let newFrameData = this.state.data;
-          this.composeHashMap(messageData.message);
-          this.setState({
-            data: newFrameData,
-          });
-          this.createHashMap(newFrameData);
-        } else if (messageData.type === "element_gc") {
-          (messageData.message as number[]).forEach((it) => {
-            delete this.lastFrameDataHashMap[it];
-          });
-        } else if (messageData.type === "decode_drawable") {
-          MPDrawable.decodeDrawable(messageData.message);
-        } else if (messageData.type === "route") {
-          Router.receivedRouteMessage(messageData.message);
-        } else if (messageData.type === "mpjs") {
-          MPJS.instance.handleMessage(
-            messageData.message,
-            (result) => {
-              App.callbackChannel(
-                JSON.stringify({
-                  type: "mpjs",
-                  message: {
-                    requestId: messageData.message.requestId,
-                    result: result,
-                  },
-                })
-              );
-            },
-            (funcId: string, args: any[]) => {
-              App.callbackChannel(
-                JSON.stringify({
-                  type: "mpjs",
-                  message: {
-                    funcId: funcId,
-                    arguments: args,
-                  },
-                })
-              );
-            }
-          );
-        } else if (messageData.type === "action:web_dialogs") {
-          WebDialogs.receivedWebDialogsMessage(messageData.message);
-        } else {
-          MPCore.plugins.forEach((plugin) => {
-            plugin.onMessage?.call(this, messageData);
-          });
-        }
-      } catch (error) {
-        console.error(error);
-      }
+      this.onChannelMessage(event.data);
     };
     socket.onopen = () => {
       this.setState({ isConnecting: false });
       this.setupFonts();
       this.setupPlugins();
+      App.resendFragmentsInitEvents();
     };
     socket.onclose = () => {
       this.setState({ isConnecting: true });
@@ -184,63 +145,7 @@ export class App extends Component<
 
   setupJSChannel() {
     window.addEventListener("message", (event) => {
-      try {
-        const messageData = JSON.parse(event.data);
-        if (messageData.type === "frame_data") {
-          this.composeSameMap(messageData.message);
-          this.setState({
-            data: messageData.message,
-          });
-          this.createHashMap(messageData.message);
-        } else if (messageData.type === "diff_data") {
-          let newFrameData = this.state.data;
-          this.composeHashMap(messageData.message);
-          this.setState({
-            data: newFrameData,
-          });
-          this.createHashMap(newFrameData);
-        } else if (messageData.type === "element_gc") {
-          (messageData.message as number[]).forEach((it) => {
-            delete this.lastFrameDataHashMap[it];
-          });
-        } else if (messageData.type === "decode_drawable") {
-          MPDrawable.decodeDrawable(messageData.message);
-        } else if (messageData.type === "route") {
-          Router.receivedRouteMessage(messageData.message);
-        } else if (messageData.type === "mpjs") {
-          setTimeout(() => {
-            MPJS.instance.handleMessage(
-              messageData.message,
-              (result) => {
-                App.callbackChannel(
-                  JSON.stringify({
-                    type: "mpjs",
-                    message: {
-                      requestId: messageData.message.requestId,
-                      result: result,
-                    },
-                  })
-                );
-              },
-              (funcId: string, args: any[]) => {
-                App.callbackChannel(
-                  JSON.stringify({
-                    type: "mpjs",
-                    message: {
-                      funcId: funcId,
-                      arguments: args,
-                    },
-                  })
-                );
-              }
-            );
-          }, 4);
-        } else {
-          MPCore.plugins.forEach((plugin) => {
-            plugin.onMessage?.call(this, messageData);
-          });
-        }
-      } catch (error) {}
+      this.onChannelMessage(event.data);
     });
     this.setupFonts();
     this.setupPlugins();
@@ -249,6 +154,94 @@ export class App extends Component<
       window.postMessage(message, "*");
     };
     (window as any).mpClientAttached = true;
+  }
+
+  onChannelMessage(message: any) {
+    try {
+      const messageData = JSON.parse(message);
+      if (messageData.type === "frame_data") {
+        this.composeSameMap(messageData.message);
+        this.setState(
+          {
+            data: messageData.message,
+          },
+          () => {
+            this.dispatchFragmentData();
+          }
+        );
+        this.createHashMap(messageData.message);
+      } else if (messageData.type === "diff_data") {
+        let newFrameData = this.state.data;
+        this.composeHashMap(messageData.message);
+        this.setState(
+          {
+            data: newFrameData,
+          },
+          () => {
+            this.dispatchFragmentData();
+          }
+        );
+        this.createHashMap(newFrameData);
+      } else if (messageData.type === "element_gc") {
+        (messageData.message as number[]).forEach((it) => {
+          delete this.lastFrameDataHashMap[it];
+        });
+      } else if (messageData.type === "decode_drawable") {
+        MPDrawable.decodeDrawable(messageData.message);
+      } else if (messageData.type === "route") {
+        Router.receivedRouteMessage(messageData.message);
+      } else if (messageData.type === "mpjs") {
+        MPJS.instance.handleMessage(
+          messageData.message,
+          (result) => {
+            App.callbackChannel(
+              JSON.stringify({
+                type: "mpjs",
+                message: {
+                  requestId: messageData.message.requestId,
+                  result: result,
+                },
+              })
+            );
+          },
+          (funcId: string, args: any[]) => {
+            App.callbackChannel(
+              JSON.stringify({
+                type: "mpjs",
+                message: {
+                  funcId: funcId,
+                  arguments: args,
+                },
+              })
+            );
+          }
+        );
+      } else if (messageData.type === "action:web_dialogs") {
+        WebDialogs.receivedWebDialogsMessage(messageData.message);
+      } else {
+        MPCore.plugins.forEach((plugin) => {
+          plugin.onMessage?.call(this, messageData);
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  dispatchFragmentData() {
+    if (this.state.data?.scaffold?.attributes?.isFragmentMode === true) {
+      const body = this.state.data?.scaffold?.attributes?.body;
+      const children = body?.children?.[0]?.children?.[0]?.children;
+      if (children && children instanceof Array) {
+        children.forEach((it) => {
+          if (it.name === "mp_fragment_widget") {
+            const fragmentKey = it.attributes.key;
+            const data = it.children[0].children[0];
+            MPFragment.fragments[fragmentKey]?.onReceiveData(data);
+          }
+        });
+      }
+    }
   }
 
   setupFonts() {
@@ -284,6 +277,9 @@ export class App extends Component<
   }
 
   render() {
+    if (this.state.data?.scaffold?.attributes?.isFragmentMode === true) {
+      return <div></div>;
+    }
     return (
       <div style={{ display: "contents" }}>
         {this.state.data?.mainTabBar ? (
@@ -340,7 +336,9 @@ export class App extends Component<
           textAlign: "center",
           lineHeight: "20px",
         }}
-      >Connecting to {(new URL(window.location.href)).hostname} ...</div>
+      >
+        Connecting to {new URL(window.location.href).hostname} ...
+      </div>
     );
   }
 
