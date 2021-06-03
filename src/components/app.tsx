@@ -24,12 +24,24 @@ export class App extends Component<
 > {
   static callbackChannel: (message: string) => void = () => {};
 
-  static initFragment(el: HTMLDivElement, route: string) {
+  static initFragment(options: {
+    element: HTMLDivElement;
+    route: string;
+    onMethodCall?: (method: string, args?: { [key: string]: any }) => Promise<any>;
+  }) {
+    if (options.element.attributes.getNamedItem("mp-attached")?.value === "1") {
+      return;
+    }
+    options.element.setAttribute("mp-attached", "1");
     ReactDOM.render(
       <React.StrictMode>
-        <MPFragment route={route} el={el} />
+        <MPFragment
+          route={options.route}
+          element={options.element}
+          onMethodCall={options.onMethodCall}
+        />
       </React.StrictMode>,
-      el
+      options.element
     );
   }
 
@@ -218,6 +230,8 @@ export class App extends Component<
         );
       } else if (messageData.type === "action:web_dialogs") {
         WebDialogs.receivedWebDialogsMessage(messageData.message);
+      } else if (messageData.type === "fragment") {
+        MPFragment.receivedFragmentMessage(messageData.message);
       } else {
         MPCore.plugins.forEach((plugin) => {
           plugin.onMessage?.call(this, messageData);

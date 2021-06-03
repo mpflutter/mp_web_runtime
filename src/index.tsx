@@ -19,8 +19,8 @@ ReactDOM.render(
 const fragments = document.querySelectorAll("[mp-route]");
 for (let index = 0; index < fragments.length; index++) {
   const element = fragments[index];
-  (window as any).$MPFlutter.App.initFragment(
+  (window as any).$MPFlutter.App.initFragment({
     element,
-    element.attributes.getNamedItem("mp-route")?.value
-  );
+    route: element.attributes.getNamedItem("mp-route")?.value,
+  });
 }

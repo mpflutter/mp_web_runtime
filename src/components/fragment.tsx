@@ -5,12 +5,27 @@ import { MPCore } from "./mpcore/mpcore";
 
 export class MPFragment extends Component<
   {
-    el: HTMLDivElement;
+    element: HTMLDivElement;
     route: string;
+    onMethodCall?: (
+      method: string,
+      args?: { [key: string]: any }
+    ) => Promise<any>;
   },
   { data?: MPComponentsProps }
 > {
   static fragments: { [key: string]: MPFragment } = {};
+
+  static receivedFragmentMessage(message: any) {
+    if (message.event === "onMethodCall") {
+      const data = message.data;
+      const key = data.key;
+      const requestId = data.requestId;
+      const method = data.method;
+      const params = data.params;
+      this.fragments[key]?.onMethodCall(requestId, method, params);
+    }
+  }
 
   readonly fragmentKey = "fragment_" + Math.random().toString();
 
@@ -30,8 +45,8 @@ export class MPFragment extends Component<
           data: {
             key: this.fragmentKey,
             route: this.props.route,
-            width: this.props.el.clientWidth,
-            height: this.props.el.clientHeight,
+            width: this.props.element.clientWidth,
+            height: this.props.element.clientHeight,
           },
         },
       })
@@ -52,14 +67,36 @@ export class MPFragment extends Component<
     );
   }
 
+  async onMethodCall(
+    requestId: string,
+    method: string,
+    args?: { [key: string]: any }
+  ) {
+    const result = await this.props.onMethodCall?.call(this, method, args);
+    App.callbackChannel(
+      JSON.stringify({
+        type: "fragment",
+        message: {
+          event: "onMethodCallResult",
+          data: {
+            requestId,
+            result,
+          },
+        },
+      })
+    );
+  }
+
   componentWillUnmount() {
     delete MPFragment.fragments[this.fragmentKey];
+    this.props.element.removeAttribute("mp-attached");
     this.sendDisposeEvent();
   }
 
   onReceiveData(data: any) {
-    if (this.props.el.isConnected !== true) {
+    if (this.props.element.isConnected !== true) {
       delete MPFragment.fragments[this.fragmentKey];
+      this.props.element.removeAttribute("mp-attached");
       this.sendDisposeEvent();
       return;
     }
