@@ -3,6 +3,7 @@ import { MPWebView } from "./web_view";
 import { MPScaffold } from "./scaffold";
 import { MPPageView } from "./page_view";
 import { MPVideoView } from "./video_view";
+import { MPIcon } from "./icon";
 
 export class MPKit {
   static components: { [key: string]: ComponentType<any> } = {
@@ -10,5 +11,6 @@ export class MPKit {
     mp_scaffold: MPScaffold,
     mp_page_view: MPPageView,
     mp_video_view: MPVideoView,
+    mp_icon: MPIcon,
   };
 }

@@ -349,6 +349,7 @@ export class App extends Component<
           height: "20px",
           textAlign: "center",
           lineHeight: "20px",
+          zIndex: 9999,
         }}
       >
         Connecting to {new URL(window.location.href).hostname} ...
