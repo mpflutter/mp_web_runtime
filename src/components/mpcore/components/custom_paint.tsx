@@ -262,7 +262,7 @@ export class CustomPaint extends PureComponent<{ data: MPComponentsProps }> {
     ctx.lineWidth = paint.strokeWidth;
     ctx.miterLimit = paint.strokeMiterLimit;
     ctx.lineCap = paint.strokeCap.replace("StrokeCap.", "");
-    ctx.lineJoin = paint.strokeCap.replace("StrokeJoin.", "");
+    ctx.lineJoin = paint.strokeJoin.replace("StrokeJoin.", "");
     if (paint.style === "PaintingStyle.fill") {
       ctx.fillStyle = cssColor(paint.color);
       ctx.strokeStyle = "transparent";
