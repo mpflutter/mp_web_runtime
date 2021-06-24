@@ -39,6 +39,10 @@ export class MPJS {
       this.getValue(message, callback);
     } else if (message.event === "setValue") {
       this.setValue(message, callback);
+    } else if (message.event === "hasProperty") {
+      this.hasProperty(message, callback);
+    } else if (message.event === "deleteProperty") {
+      this.deleteProperty(message, callback);
     }
   }
 
@@ -87,6 +91,29 @@ export class MPJS {
     callback(undefined);
   }
 
+  hasProperty(message: MPJSMessage, callback: (result: any) => void) {
+    const params = message.params as MPJSGetValueParams;
+    const callingObject = this.getCallee(
+      params.objectHandler,
+      params.callChain
+    );
+    callback(
+      this.wrapResult(callingObject && callingObject.hasOwnProperty(params.key))
+    );
+  }
+
+  deleteProperty(message: MPJSMessage, callback: (result: any) => void) {
+    const params = message.params as MPJSGetValueParams;
+    const callingObject = this.getCallee(
+      params.objectHandler,
+      params.callChain
+    );
+    if (callingObject) {
+      delete callingObject[params.key];
+    }
+    callback(1);
+  }
+
   getCallee(objectHandler: string, callChain: string[]): any {
     const rootObject = this.objectRefs[objectHandler] ?? window;
     let currentObject: any = rootObject;
@@ -100,7 +127,10 @@ export class MPJS {
     return currentObject;
   }
 
-  wrapArgument(arg: any, funcCallback: (funcId: string, args: any[]) => void): any {
+  wrapArgument(
+    arg: any,
+    funcCallback: (funcId: string, args: any[]) => void
+  ): any {
     if (typeof arg === "string" && arg.startsWith("func:")) {
       const funcId = arg;
       const self = this;
