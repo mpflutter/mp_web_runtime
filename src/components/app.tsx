@@ -12,6 +12,7 @@ import { MPComponentsProps, MPDocumentProps } from "./mpcore/component";
 import { MPJS } from "./mpcore/mpjs/mpjs";
 import { MPDrawable } from "./mpcore/components/custom_paint";
 import { MPFragment } from "./fragment";
+import { MethodChannelHandler } from "./mpcore/mpjs/method_channel_handler";
 
 export let flutterBase = "./";
 export const flutterFonts = [
@@ -116,6 +117,7 @@ export class App extends Component<
     } else {
       this.setupJSChannel();
     }
+    MethodChannelHandler.installHandler();
   }
 
   setupDartChannel() {
